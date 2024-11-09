@@ -1,0 +1,269 @@
+---
+title: "Controle On-Line de Processo por atributo c/ Intervalo de Amostragem Variável - Iniciação Científica"
+author: "Nome: João Victor Lauro"
+date: "Data: 04/11/2024"
+output:
+  html_document:
+    code_folding: show
+    df_print: paged
+    theme: spacelab
+    highlight: tango
+---
+
+<style type="text/css">
+.main-container {
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+```{r setup, include = F}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+### **Bibliotecas Utilizadas:**
+
+```{r libraries, echo = T, include = T, message = F, warning = F}
+# Bibliotecas:
+
+# Paletas de Cores Utilizadas:
+  cores <- c(
+    "#FF7FC6", "#D55E00", "#E69F00", "#F0E442","#0072B2", "#A2DDFF", "#009E73", ## Paleta Wong
+    "#FFFFFF", "#AAAAAA", "#000000" ## Neutras
+    )
+```
+
+### **Introdução**
+
+O objetivo deste trabalho é estudar um processo de produção, cuja abordagem de controle e manutenção do sistema envolva intervalos de amostragem variáveis, para compreender o modelo probabílistico, analisar seu comportamento assintótico, e avaliar os custos de produção, inspeção, reparo e envio dos itens produzidos ao mercado.
+
+Seja um processo de produção que, a cada unidade de tempo, produz itens individuais e independentes. Ele inicia-se operando **Sob Controle** e, em algum instante aleatório, devido a uma causa especial, fica **Fora de Controle**. Para garantir que a produção opere **Sob Controle**, a regra de monitoramento estabelece algumas situações, assegurando seu retorno às condições iniciais do processo de produção. Os tempos entre ajustes sucessivos são indepentes entre si e são denominados **Ciclos de Regeneração**. A sequência desses ciclos constituem o processo de renovação do processo. Apresenta-se a seguir a proposta de "Controle On-Line de Processo por atributo c/ Intervalo de Amostragem Variável", com erros de classificação, que considera um tempo de espera **L** até a primeira inspeção após ajuste, maior que os demais intervalos de tempo **m** entre inspeções.
+
+Esse modelo pode seguir as seguintes distribuições:
+
++ Tempo Contínuo $\rightarrow$ Distribuição Exponencial
++ Tempo Discreto $\rightarrow$ Distribuição Geométrica
+
+Neste trabalho, utilizaremos a **distribuição geométrica**, com parâmetro $\pi \in [0, 1]$ para descrever o tempo de falha do processo.
+
+<br>
+
+### **Controle On-Line de Processo por atributo c/ Intervalo de Amostragem Variável** {.tabset .tabset-pills}
+
+#### **Hipóteses**
+
+**1) Modelo do Processo:**
+O Processo de Produção segue uma distribuição geométrica com parâmetro $\pi \in [0, 1]$:
+
++ Função de Massa de Probabilidade (FMP):
+$P(X = k) = (1 - \pi)^{k - 1} \cdot \pi, \quad k = 1, 2, 3, \dots$
++ Função de Distribuição Acumulada (FDA):
+$P(X \leq k) = 1 - (1 - \pi)^k$
++ Função Geradora de Momentos (FGM):
+$M_X(t) = \frac{\pi e^t}{1 - (1 - \pi)e^t}, \quad \forall \quad t < -\ln(1 - \pi)$
++ Esperança:
+$E(X) = \frac{1}{\pi}$
++ Variância:
+$\text{Var}(X) = \frac{1 - \pi}{\pi^2}$
+  + A distribuição geométrica, assim como a exponencial, possuem a propriedade da falta de memória, ou seja, para qualquer $m, n \in \mathbb{N}$:
+  $P(X > m + n \mid X > m) = P(X > n)$
+
+
+**2) Situações do Processo:**
+O Processo de Produção pode se encontrar em 2 situações:
+
++ Sob Controle $\rightarrow$ Proporção de itens produzidos é $p_{(+)}$;
++ Fora de Controle $\rightarrow$ Proporção de itens produzidos é $p_{(-)}$;
+  + $p_{(+)}$ > $p_{(-)}$, ambas constantes;
+  + Após a mudança de estado, a proporção de itens conformes diminui de $p_{(+)}$ para $p_{(-)}$;
+  + Após a realização de um ajuste, a proporção de itens conformes retorna ao seu valor inicial $p_{(+)}$.
+  
+**3) Monitoramento do Processo:**
+Para o monitorar o processo, inspeciona-se um único item de acordo com os seguintes critérios:
+
++ A primeira inspeção ocorre após a produção de **L** itens (Inspeciona-se o **L-ésimo** item);
++ As inspeções seguintes ocorrem após a produção de **m** itens (Inspeciona-se o **m-ésimo** item);
+  + Essa abordagem visa diminuir o custo médio, uma vez que, após um ajuste, o processo certamente se inicia **Sob Controle** e seria mais ecônomico e razoável esperar mais tempo para realizar a primeira inspeção;
++ O item é submetido á uma única classificação, entre **Conforme** ou **Não-Conforme**, cujo tempo de execução é considerado desprezível e os itens inspecionados são descartados;
+  + No primeiro caso, o processo de produção é classificado como **Sob Controle**, não ocorre intervenção, e continua operando normalmente;
+  + No segundo caso, o processo de produção é classificado como **Fora de Controle**, ocorre intervenção, e é instantaneamente paralisado e ajustado;
+  + Quando um item é declarado como **Conforme**, há uma incerteza se o processo estaria **Fora de Controle** **(???)**;
++ Existe a probabilidade de ocorrer erros de classificação:
+  + $\alpha$ $\rightarrow$ Item **Conforme**, Classificação **Não-Conforme**;
+  + $\beta$ $\rightarrow$ Item **Não-Conforme**, Classificação **Conforme**;
++ Inversamente, existe a probabilidade de não ocorrer erros de classificação:
+  + $(1 - \alpha)$ $\rightarrow$ Item **Conforme**, Classificação **Conforme**;
+  + $(1 - \beta)$ $\rightarrow$ Item **Não-Conforme**, Classificação **Não-Conforme**.
+
+<br>
+
+#### **Modelo Probabilístico**
+
+Há 3 Variáveis Aleatórias associadas ao item inspecionado:
+
++ X $\rightarrow$ Indica a real condição de conformidade do item:
+  + Não é observável;
+  + X = 1 $\rightarrow$ Item ```Conforme```;
+  + X = 0 $\rightarrow$ Item ```Não-Conforme```.
++ Y $\rightarrow$ Indica o resultado de classificação do item obtida pela inspeção:
+  + Y = 1 $\rightarrow$ Classificação ```Conforme```;
+  + Y = 0 $\rightarrow$ Classificação ```Não-Conforme```.
++ Z $\rightarrow$ Indica o estado do processo no instante de produção do item:
+  + Não é observável;
+  + Z = 1 $\rightarrow$ Processo de produção ```Sob Controle```;
+  + Z = 0 $\rightarrow$ Processo de produção ```Fora de Controle```.
+
+As probabilidades relacionados à proporção de itens conformes/não-conformes são:
+
++ $P\{X = 1 \mid Z = 1\} = p_{(+)}$;
++ $P\{X = 1 \mid Z = 0\} = p_{(-)}$.
+
+As probabilidades relacionados às classificações dos items inspecionados são:
+
++ $P\{Y = 1 \mid X = 1\} = 1 - \alpha$ $\rightarrow$ Item ```Conforme```, Classificação ```Conforme```;
++ $P\{Y = 0 \mid X = 0\} = 1 - \beta$ $\rightarrow$ Item ```Não-Conforme```, Classificação ```Não-Conforme```;
++ $P\{Y = 0 \mid X = 1\} = \alpha$ $\rightarrow$ Item ```Conforme```, Classificação ```Não-Conforme```;
++ $P\{Y = 1 \mid X = 0\} = \beta$ $\rightarrow$ Item ```Não-Conforme```, Classificação ```Conforme```.
+
+As probabilidades relacionadas aos estados do processo são:
+
++ $P \{ Z_{1} = 1, ..., Z_{L} = 1 \mid Z_{0} = 1 \} = (1 - \pi)^{L}$ $\rightarrow$ Processo ```Sob Controle``` no primeiro ciclo corrente;
++ $P \{ Z_{1} = 1, ..., Z_{m} = 1 \mid Z_{0} = 1 \} = (1 - \pi)^{m}$ $\rightarrow$ Processo ```Sob Controle``` nos demais ciclos correntes;
++ $P \{ Z_{1} = 1, ..., Z_{L} = 0 \mid Z_{0} = 1 \} = \left[ 1 - (1 - \pi)^{L} \right]$ $\rightarrow$ Processo ```Fora de Controle``` no primeiro ciclo corrente;
++ $P \{ Z_{1} = 1, ..., Z_{m} = 0 \mid Z_{0} = 1 \} = \left[ 1 - (1 - \pi)^{m} \right]$ $\rightarrow$ Processo ```Fora de Controle``` nos demais ciclos correntes.
+
+Se o processo estiver ```Sob Controle```, as probabilidades de ```Não Ajustar```/```Ajustar``` o processo são:
+
+$$
+\begin{align*}
+p_{(A)} 
+= P \{Y = 1 \mid Z = 1 \} 
+&= \sum_{i=0}^{1} P \{ Y = 1 , X = i \mid Z = 1 \} \\
+&= \sum_{i=0}^{1} P \{ X = i \mid Z = 1 \} P \{ Y = 1 \mid X = i, Z = 1 \} \\
+&= \left[ \underset{(1 - p_{(+)})}{\underbrace{P\{X = 0 \mid Z = 1\}}} 
+\underset{\beta}{\underbrace{P\{Y = 1 \mid X = 0, Z = 1\}}} \right] 
++ \left[ \underset{p_{(+)}}{\underbrace{P\{X = 1 \mid Z = 1\}}} 
+\underset{(1 - \alpha)}{\underbrace{P\{Y = 1 \mid X = 1, Z = 1\}}} \right] \\
+&= \left[ (1 - p_{(+)}) \beta \right] + \left[ p_{(+)} (1 - \alpha) \right] 
+\\\\
+(1 - p_{(A)})
+= P \{Y = 0 \mid Z = 1 \}
+&= 1 - \left[ ((1 - p_{(+)}) \beta ) + (p_{(+)} (1 - \alpha)) \right] \\
+&= \left[ ((1 - p_{(+)}) (1 - \beta) ) + (p_{(+)} \alpha) \right]
+\end{align*}
+$$
+
+Se o processo estiver ```Fora de Controle```, as probabilidades de ```Não Ajustar```/```Ajustar``` o processo são:
+
+$$
+\begin{align*}
+p_{(D)} 
+= P \{Y = 1 \mid Z = 0 \} 
+&= \sum_{i=0}^{1} P \{ Y = 1 , X = i \mid Z = 0 \} \\
+&= \sum_{i=0}^{1} P \{ X = i \mid Z = 0 \} P \{ Y = 1 \mid X = i, Z = 0 \} \\
+&= \left[ \underset{(1 - p_{(-)})}{\underbrace{P\{X = 0 \mid Z = 0\}}} 
+\underset{\beta}{\underbrace{P\{Y = 1 \mid X = 0, Z = 0\}}} \right] 
++ \left[ \underset{p_{(-)}}{\underbrace{P\{X = 1 \mid Z = 0\}}} 
+\underset{(1 - \alpha)}{\underbrace{P\{Y = 1 \mid X = 1, Z = 0\}}} \right] \\\\
+&= \left[ (1 - p_{(-)}) \beta \right] + \left[ p_{(-)} (1 - \alpha) \right] 
+\\\\
+(1 - p_{(D)})
+=P \{Y = 0 \mid Z = 0 \} 
+&= 1 - \left[ ((1 - p_{(-)}) \beta ) + (p_{(-)} (1 - \alpha)) \right] \\
+&= \left[ ((1 - p_{(-)}) (1 - \beta) ) + (p_{(-)} \alpha) \right]
+\end{align*}
+$$
+
+Resumindo:
+
++ $p_{(A)} = P \{ Y = 1 \mid Z = 1 \} = \left[ (1 - p_{(+)}) \beta \right] + \left[ p_{(+)} (1 - \alpha) \right]$
++ $p_{(D)} = P \{ Y = 1 \mid Z = 0 \} = \left[ (1 - p_{(-)}) \beta \right] + \left[ p_{(-)} (1 - \alpha) \right]$
+
+<br>
+
+#### **Cadeia de Markov**
+
+O processo de produção, o monitoramento e a regra de decisão sobre o ajuste em cada ciclo de inspeção podem ser modelados como uma cadeia de Markov em tempo discreto, em que cada passado da cadeia representa um ciclo. Os estados da cadeia descrevem as várias combinações da situação do processo ao final de um ciclo e da consequente decisão.
+
+O espaço de estados da cadeia é finito e dado por:
+
+\[E = \{ (w,s); \; w = 0,1,2 \; \text{e} \; s = 0,1\}\]
+
++ W indica as situações possíveis de mudança do estado do processo:
+  + W = 0 $\rightarrow$ Processo Sob Controle até o final do ciclo corrente;
+  + W = 1 $\rightarrow$ Processo Fora de Controle, mudança ocorreu durante o ciclo corrente;
+  + W = 2 $\rightarrow$ Processo Fora de Controle, mudança ocorreu durante no ciclo anterior;
++ S indica a decisão sobre o ajuste:
+  + S = 0 $\rightarrow$ Processo é ajustado;
+  + S = 1 $\rightarrow$ Processo não é ajustado.
+
+A cadeia de Markov fica da seguinte forma:
+
+$$
+\begin{bmatrix}
+P_{(0,0)(0,0)} & P_{(0,0)(0,1)} & P_{(0,0)(1,0)} & P_{(0,0)(1,1)} & P_{(0,0)(2,0)} & P_{(0,0)(2,1)} \\
+P_{(0,1)(0,0)} & P_{(0,1)(0,1)} & P_{(0,1)(1,0)} & P_{(0,1)(1,1)} & P_{(0,1)(2,0)} & P_{(0,1)(2,1)} \\
+P_{(1,0)(0,0)} & P_{(1,0)(0,1)} & P_{(1,0)(1,0)} & P_{(1,0)(1,1)} & P_{(1,0)(2,0)} & P_{(1,0)(2,1)} \\
+P_{(1,1)(0,0)} & P_{(1,1)(0,1)} & P_{(1,1)(1,0)} & P_{(1,1)(1,1)} & P_{(1,1)(2,0)} & P_{(1,1)(2,1)} \\
+P_{(2,0)(0,0)} & P_{(2,0)(0,1)} & P_{(2,0)(1,0)} & P_{(2,0)(1,1)} & P_{(2,0)(2,0)} & P_{(2,0)(2,1)} \\
+P_{(2,1)(0,0)} & P_{(2,1)(0,1)} & P_{(2,1)(1,0)} & P_{(2,1)(1,1)} & P_{(2,1)(2,0)} & P_{(2,1)(2,1)} \\
+\end{bmatrix}
+$$
+
+Na primeira, terceira e quinta linhas/colunas, o ciclo anterior/anterior não é ajustado;
+Na segunda, quarta e sexta linhas/colunas, o ciclo anterior/seguinte é ajustado.
+
+Com isso, as probabilidades de transição podem ser calculadas da seguinte forma:
+
+Quando o ciclo anterior é ajustado (1º, 3º e 5º linhas), ou seja, (w,0), p/ w =  0, 1, 2:
+
+  + $P_{(w,0)(0,0)} = (1 - \pi)^{L}(1 - p_{(A)})$
+  + $P_{(w,0)(0,1)} = (1 - \pi)^{L}p_{(A)}$
+  + $P_{(w,0)(1,0)} = \left[ 1 - (1 - \pi)^{L} \right] (1 - p_{(D)})$
+  + $P_{(w,0)(1,1)} = \left[ 1 - (1 - \pi)^{L} \right] p_{(D)}$
+  + $P_{(w,0)(2,0)} = 0$
+    + O ciclo seguinte começa ```Sob-Controle```.
+  + $P_{(w,0)(2,1)} = 0$
+    + O ciclo seguinte começa ```Sob-Controle```.
+  
+Quando o ciclo anterior não é ajustado e o processo está ```Sob-Controle``` (2º linha), ou seja, (0,1):
+
+  + $P_{(0,1)(0,0)} = (1 - \pi)^{m}(1 - p_{(A)})$
+  + $P_{(0,1)(0,1)} = (1 - \pi)^{m}p_{(A)}$
+  + $P_{(0,1)(1,0)} = \left[ 1 - (1 - \pi)^{m} \right] (1 - p_{(D)})$
+  + $P_{(0,1)(1,1)} = \left[ 1 - (1 - \pi)^{m} \right] p_{(D)}$
+  + $P_{(0,1)(2,0)} = 0$
+    + O ciclo seguinte começa ```Sob-Controle```.
+  + $P_{(0,1)(2,1)} = 0$
+    + O ciclo seguinte começa ```Sob-Controle```.
+
+Quando o ciclo anterior não é ajustado (4 e 6º linhas), ou seja, (w,1), p/ w = 1, 2:
+
+  + $P_{(w,1)(0,0)} = 0$
+    + O ciclo anterior começa ```Fora de Controle```
+  + $P_{(w,1)(0,1)} = 0$
+    + O ciclo anterior começa ```Fora de Controle```
+  + $P_{(w,1)(1,0)} = 0$
+    + O ciclo anterior começa ```Fora de Controle```
+  + $P_{(w,1)(1,1)} = 0$
+    + O ciclo anterior começa ```Fora de Controle```
+  + $P_{(w,1)(2,0)} = 1 - p_{(D)}$
+  + $P_{(w,1)(2,1)} = p_{(D)}$
+  
+Fazendo as substituições, obtemos:
+
+$$
+\begin{bmatrix}
+(1-p_{(A)})(1-\pi)^L & p_{(A)}(1-\pi)^L & (1-p_{(D)})[1 - (1-\pi)^L] & p_{(D)}[1 - (1-\pi)^L] & 0 & 0 \\
+(1-p_{(A)})(1-\pi)^m & p_{(A)}(1-\pi)^m & (1-p_{(D)})[1 - (1-\pi)^m] & p_{(D)}[1 - (1-\pi)^m] & 0 & 0  \\
+(1-p_{(A)})(1-\pi)^L & p_{(A)}(1-\pi)^L & (1-p_{(D)})[1 - (1-\pi)^L] & p_{(D)}[1 - (1-\pi)^L] & 0 & 0 \\
+0 & 0 & 0 & 0 & 1-p_{(D)} & p_{(D)} \\
+(1-p_{(A)})(1-\pi)^L & p_{(A)}(1-\pi)^L & (1-p_{(D)})[1 - (1-\pi)^L] & p_{(D)}[1 - (1-\pi)^L] & 0 & 0 \\
+0 & 0 & 0 & 0 & 1-p_{(D)} & p_{(D)} \\
+\end{bmatrix}
+$$
+
+
+
+
