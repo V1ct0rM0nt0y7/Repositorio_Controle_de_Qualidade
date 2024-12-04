@@ -2032,7 +2032,7 @@ Z_{0} = 1 \} = \left[ 1 - (1 - \pi)^{m} \right]\)</span> <span class="math inlin
 <code>Não Ajustar</code>/<code>Ajustar</code> o processo são:</p>
 <p><span class="math display">\[
 \begin{align*}
-p_{(A)}
+p_{(AS)}
 = P \{Y = 1 \mid Z = 1 \}
 &amp;= \sum_{i=0}^{1} P \{ Y = 1 , X = i \mid Z = 1 \} \\
 &amp;= \sum_{i=0}^{1} P \{ X = i \mid Z = 1 \} P \{ Y = 1 \mid X = i, Z
@@ -2046,7 +2046,7 @@ p_{(A)}
 &amp;= \left[ (1 - p_{(+)}) \beta \right] + \left[ p_{(+)} (1 - \alpha)
 \right]
 \\\\
-(1 - p_{(A)})
+(1 - p_{(AS)})
 = P \{Y = 0 \mid Z = 1 \}
 &amp;= 1 - \left[ ((1 - p_{(+)}) \beta ) + (p_{(+)} (1 - \alpha))
 \right] \\
@@ -2058,7 +2058,7 @@ probabilidades de <code>Não Ajustar</code>/<code>Ajustar</code> o
 processo são:</p>
 <p><span class="math display">\[
 \begin{align*}
-p_{(D)}
+p_{(AF)}
 = P \{Y = 1 \mid Z = 0 \}
 &amp;= \sum_{i=0}^{1} P \{ Y = 1 , X = i \mid Z = 0 \} \\
 &amp;= \sum_{i=0}^{1} P \{ X = i \mid Z = 0 \} P \{ Y = 1 \mid X = i, Z
@@ -2072,7 +2072,7 @@ p_{(D)}
 &amp;= \left[ (1 - p_{(-)}) \beta \right] + \left[ p_{(-)} (1 - \alpha)
 \right]
 \\\\
-(1 - p_{(D)})
+(1 - p_{(AF)})
 =P \{Y = 0 \mid Z = 0 \}
 &amp;= 1 - \left[ ((1 - p_{(-)}) \beta ) + (p_{(-)} (1 - \alpha))
 \right] \\
@@ -2081,10 +2081,10 @@ p_{(D)}
 \]</span></p>
 <p>Resumindo:</p>
 <ul>
-<li><span class="math inline">\(p_{(A)} = P \{ Y = 1 \mid Z = 1 \} =
+<li><span class="math inline">\(p_{(AS)} = P \{ Y = 1 \mid Z = 1 \} =
 \left[ (1 - p_{(+)}) \beta \right] + \left[ p_{(+)} (1 - \alpha)
 \right]\)</span></li>
-<li><span class="math inline">\(p_{(D)} = P \{ Y = 1 \mid Z = 0 \} =
+<li><span class="math inline">\(p_{(AF)} = P \{ Y = 1 \mid Z = 0 \} =
 \left[ (1 - p_{(-)}) \beta \right] + \left[ p_{(-)} (1 - \alpha)
 \right]\)</span></li>
 </ul>
@@ -2144,16 +2144,46 @@ seguinte forma:</p>
 (w,0), p/ w = 0, 1, 2:</p>
 <ul>
 <li><span class="math inline">\(P_{(w,0)(0,0)} = (1 - \pi)^{L}(1 -
-p_{(A)})\)</span></li>
+p_{(AS)})\)</span>
+<ul>
+<li>A probabilidade de <strong>não ocorrer</strong> uma mudança na
+fração de <strong>L</strong> itens conformes <span class="math inline">\((1 - \pi)^{L}\)</span> no ciclo seguinte, com a
+probabilidade <span class="math inline">\((1 - P_{(AS)})\)</span> de
+<strong>ajustar</strong> quando o processo está
+<code>Sob-Controle</code>;</li>
+</ul></li>
 <li><span class="math inline">\(P_{(w,0)(0,1)} = (1 -
-\pi)^{L}p_{(A)}\)</span></li>
+\pi)^{L}p_{(AS)}\)</span>
+<ul>
+<li>A probabilidade de <strong>não ocorrer</strong> uma mudança na
+fração de <strong>L</strong> itens conformes <span class="math inline">\((1 - \pi)^{L}\)</span> no ciclo seguinte, com a
+probabilidade <span class="math inline">\(P_{(AS)}\)</span> de
+<strong>não ajustar</strong> quando o processo está
+<code>Sob-Controle</code>;</li>
+</ul></li>
 <li><span class="math inline">\(P_{(w,0)(1,0)} = \left[ 1 - (1 -
-\pi)^{L} \right] (1 - p_{(D)})\)</span></li>
+\pi)^{L} \right] (1 - p_{(AF)})\)</span>
+<ul>
+<li>A probabilidade de <strong>ocorrer</strong> uma mudança na fração de
+<strong>L</strong> itens conformes <span class="math inline">\(\left[ 1
+- (1 - \pi)^{L} \right]\)</span> no ciclo seguinte, com a probabilidade
+<span class="math inline">\((1 - P_{(AF)})\)</span> de
+<strong>ajustar</strong> quando o processo está
+<code>Fora de Controle</code>;</li>
+</ul></li>
 <li><span class="math inline">\(P_{(w,0)(1,1)} = \left[ 1 - (1 -
-\pi)^{L} \right] p_{(D)}\)</span></li>
+\pi)^{L} \right] p_{(AF)}\)</span>
+<ul>
+<li>A probabilidade de <strong>ocorrer</strong> uma mudança na fração de
+<strong>L</strong> itens conformes <span class="math inline">\(\left[ 1
+- (1 - \pi)^{L} \right]\)</span> no ciclo seguinte, com a probabilidade
+<span class="math inline">\(P_{(AF)}\)</span> de <strong>não
+ajustar</strong> quando o processo está
+<code>Fora de Controle</code>;</li>
+</ul></li>
 <li><span class="math inline">\(P_{(w,0)(2,0)} = 0\)</span>
 <ul>
-<li>O ciclo seguinte começa <code>Sob-Controle</code>.</li>
+<li>O ciclo seguinte começa <code>Sob-Controle</code>;</li>
 </ul></li>
 <li><span class="math inline">\(P_{(w,0)(2,1)} = 0\)</span>
 <ul>
@@ -2164,16 +2194,46 @@ p_{(A)})\)</span></li>
 <code>Sob-Controle</code> (2º linha), ou seja, (0,1):</p>
 <ul>
 <li><span class="math inline">\(P_{(0,1)(0,0)} = (1 - \pi)^{m}(1 -
-p_{(A)})\)</span></li>
+p_{(AS)})\)</span>
+<ul>
+<li>A probabilidade de <strong>não ocorrer</strong> uma mudança na
+fração de <strong>m</strong> itens conformes <span class="math inline">\((1 - \pi)^{m}\)</span> no ciclo seguinte, com a
+probabilidade <span class="math inline">\((1 - P_{(AS)})\)</span> de
+<strong>ajustar</strong> quando o processo está
+<code>Sob-Controle</code>;</li>
+</ul></li>
 <li><span class="math inline">\(P_{(0,1)(0,1)} = (1 -
-\pi)^{m}p_{(A)}\)</span></li>
+\pi)^{m}p_{(AS)}\)</span>
+<ul>
+<li>A probabilidade de <strong>não ocorrer</strong> uma mudança na
+fração de <strong>m</strong> itens conformes <span class="math inline">\((1 - \pi)^{m}\)</span> no ciclo seguinte, com a
+probabilidade <span class="math inline">\(P_{(AS)}\)</span> de
+<strong>não ajustar</strong> quando o processo está
+<code>Sob-Controle</code>;</li>
+</ul></li>
 <li><span class="math inline">\(P_{(0,1)(1,0)} = \left[ 1 - (1 -
-\pi)^{m} \right] (1 - p_{(D)})\)</span></li>
+\pi)^{m} \right] (1 - p_{(AF)})\)</span>
+<ul>
+<li>A probabilidade de <strong>ocorrer</strong> uma mudança na fração de
+<strong>m</strong> itens conformes <span class="math inline">\(\left[ 1
+- (1 - \pi)^{m} \right]\)</span> no ciclo seguinte, com a probabilidade
+<span class="math inline">\((1 - P_{(AF)})\)</span> de
+<strong>ajustar</strong> quando o processo está
+<code>Fora de Controle</code>;</li>
+</ul></li>
 <li><span class="math inline">\(P_{(0,1)(1,1)} = \left[ 1 - (1 -
-\pi)^{m} \right] p_{(D)}\)</span></li>
+\pi)^{m} \right] p_{(AF)}\)</span>
+<ul>
+<li>A probabilidade de <strong>ocorrer</strong> uma mudança na fração de
+<strong>m</strong> itens conformes <span class="math inline">\(\left[ 1
+- (1 - \pi)^{m} \right]\)</span> no ciclo seguinte, com a probabilidade
+<span class="math inline">\(P_{(AF)}\)</span> de <strong>não
+ajustar</strong> quando o processo está
+<code>Fora de Controle</code>;</li>
+</ul></li>
 <li><span class="math inline">\(P_{(0,1)(2,0)} = 0\)</span>
 <ul>
-<li>O ciclo seguinte começa <code>Sob-Controle</code>.</li>
+<li>O ciclo seguinte começa <code>Sob-Controle</code>;</li>
 </ul></li>
 <li><span class="math inline">\(P_{(0,1)(2,1)} = 0\)</span>
 <ul>
@@ -2185,39 +2245,1123 @@ p_{(A)})\)</span></li>
 <ul>
 <li><span class="math inline">\(P_{(w,1)(0,0)} = 0\)</span>
 <ul>
-<li>O ciclo anterior começa <code>Fora de Controle</code></li>
+<li>O ciclo anterior começa <code>Fora de Controle</code>;</li>
 </ul></li>
 <li><span class="math inline">\(P_{(w,1)(0,1)} = 0\)</span>
 <ul>
-<li>O ciclo anterior começa <code>Fora de Controle</code></li>
+<li>O ciclo anterior começa <code>Fora de Controle</code>;</li>
 </ul></li>
 <li><span class="math inline">\(P_{(w,1)(1,0)} = 0\)</span>
 <ul>
-<li>O ciclo anterior começa <code>Fora de Controle</code></li>
+<li>O ciclo anterior começa <code>Fora de Controle</code>;</li>
 </ul></li>
 <li><span class="math inline">\(P_{(w,1)(1,1)} = 0\)</span>
 <ul>
-<li>O ciclo anterior começa <code>Fora de Controle</code></li>
+<li>O ciclo anterior começa <code>Fora de Controle</code>;</li>
 </ul></li>
-<li><span class="math inline">\(P_{(w,1)(2,0)} = 1 -
-p_{(D)}\)</span></li>
-<li><span class="math inline">\(P_{(w,1)(2,1)} = p_{(D)}\)</span></li>
+<li><span class="math inline">\(P_{(w,1)(2,0)} = 1 - p_{(AF)}\)</span>
+<ul>
+<li>A probabilidade <span class="math inline">\((1 - P_{(AF)})\)</span>
+de <strong>ajustar</strong> quando o processo está
+<code>Fora de Controle</code>;</li>
+</ul></li>
+<li><span class="math inline">\(P_{(w,1)(2,1)} = p_{(AF)}\)</span>
+<ul>
+<li>A probabilidade <span class="math inline">\(P_{(AF)}\)</span> de
+<strong>não ajustar</strong> quando o processo está
+<code>Fora de Controle</code>.</li>
+</ul></li>
 </ul>
 <p>Fazendo as substituições, obtemos:</p>
 <p><span class="math display">\[
 \begin{bmatrix}
-(1-p_{(A)})(1-\pi)^L &amp; p_{(A)}(1-\pi)^L &amp; (1-p_{(D)})[1 -
-(1-\pi)^L] &amp; p_{(D)}[1 - (1-\pi)^L] &amp; 0 &amp; 0 \\
-(1-p_{(A)})(1-\pi)^m &amp; p_{(A)}(1-\pi)^m &amp; (1-p_{(D)})[1 -
-(1-\pi)^m] &amp; p_{(D)}[1 - (1-\pi)^m] &amp; 0 &amp; 0  \\
-(1-p_{(A)})(1-\pi)^L &amp; p_{(A)}(1-\pi)^L &amp; (1-p_{(D)})[1 -
-(1-\pi)^L] &amp; p_{(D)}[1 - (1-\pi)^L] &amp; 0 &amp; 0 \\
-0 &amp; 0 &amp; 0 &amp; 0 &amp; 1-p_{(D)} &amp; p_{(D)} \\
-(1-p_{(A)})(1-\pi)^L &amp; p_{(A)}(1-\pi)^L &amp; (1-p_{(D)})[1 -
-(1-\pi)^L] &amp; p_{(D)}[1 - (1-\pi)^L] &amp; 0 &amp; 0 \\
-0 &amp; 0 &amp; 0 &amp; 0 &amp; 1-p_{(D)} &amp; p_{(D)} \\
+(1-p_{(AS)})(1-\pi)^L &amp; p_{(AS)}(1-\pi)^L &amp; (1-p_{(AF)})[1 -
+(1-\pi)^L] &amp; p_{(AF)}[1 - (1-\pi)^L] &amp; 0 &amp; 0 \\
+(1-p_{(AS)})(1-\pi)^m &amp; p_{(AS)}(1-\pi)^m &amp; (1-p_{(AF)})[1 -
+(1-\pi)^m] &amp; p_{(AF)}[1 - (1-\pi)^m] &amp; 0 &amp; 0  \\
+(1-p_{(AS)})(1-\pi)^L &amp; p_{(AS)}(1-\pi)^L &amp; (1-p_{(AF)})[1 -
+(1-\pi)^L] &amp; p_{(AF)}[1 - (1-\pi)^L] &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 1-p_{(AF)} &amp; p_{(AF)} \\
+(1-p_{(AS)})(1-\pi)^L &amp; p_{(AS)}(1-\pi)^L &amp; (1-p_{(AF)})[1 -
+(1-\pi)^L] &amp; p_{(AF)}[1 - (1-\pi)^L] &amp; 0 &amp; 0 \\
+0 &amp; 0 &amp; 0 &amp; 0 &amp; 1-p_{(AF)} &amp; p_{(AF)} \\
 \end{bmatrix}
 \]</span></p>
+<p><br></p>
+</div>
+<div id="distribuição-estacionária-da-cadeia" class="section level4">
+<h4><strong>Distribuição Estacionária da Cadeia</strong></h4>
+<p>A matriz de transição P é irredutível e aperiódica, podendo-se obter
+sua distribuição invariante, denotada pelo vetor:</p>
+<p><span class="math display">\[
+\pi =
+\left[
+\pi(w,s); \; w = 0,1,2; \; s = 0,1
+\right]&#39;,
+\; com
+\sum_{(w,s) \in E}^{}
+\pi(w,s) = 1
+\]</span></p>
+<p>A probabilidade <span class="math inline">\(\pi(w,s)\)</span> pode
+ser vista como a proporção de tempo que o sistema de produção visita o
+estado (w,s), após um número suficientemente grande de inspeções.</p>
+<p>O vetor <span class="math inline">\(\pi\)</span> é a solução do
+sistema de equações lineares <span class="math inline">\(\pi&#39; =
+\pi&#39;P\)</span>, que pode ser reescrita como:</p>
+<p><span class="math display">\[
+\pi&#39;(P - I) = 0&#39;
+\; ou
+(P&#39; - I)\pi = 0
+\]</span></p>
+<p>em que I é a matriz identidade, 0 o vetor nulo e P’ é a transposta de
+P.</p>
+<p>Portanto, o vetor <span class="math inline">\(\pi\)</span> pode ser
+obtido a partir da resolução desse sistema linear com a restrição acima.
+Pela dimensão do sistema, a solução pode ser rapidamente obtida
+utilizando-se de técnica numérica disponível</p>
+<p>Além disso, é necessária a determinação da proporção de ciclos de
+comprimento L ou m, de cada estado da cadeia de Markov, para um número
+suficiente grande de inspeções. Sejam <span class="math inline">\(p_{L}(w,s)\)</span> a probabilidade de o intervalo
+de amostragem ter comprimento L, dado que o estado seja <span class="math inline">\((w,s)\)</span> e <span class="math inline">\(p_{m}(w,s)\)</span>, se o ciclo de monitoramento
+tiver comprimento m, com <span class="math inline">\(p_{m}(w,s) = 1 -
+p_{l}(w,s)\)</span></p>
+<p>O comprimento do intervalo de amostragem é L apenas quando se decide
+intervir no processo no ciclo imediatamente anterior. Essa situação
+corresponde às linhas da Matriz P, com s = 0. Por exemplo, <span class="math inline">\(p_{L}(0,0)\)</span> denota a probabilidade do
+ciclo corrente ter comprimento L, dado que seu estado é (0,0). É
+necessário que o último item inspecionado tenha sido declarado
+não-conforme, ou seja, (0,0), (1,0), (2,0) são os possíveis estados do
+ciclo de monitoramento imediatamente anterior. Especificamente:</p>
+<p><span class="math display">\[
+p_{L}(0,0)
+=
+\sum_{k = 0}^{2}
+P{(W_{i - 1}, S_{i - 1})}
+=
+(k,0)
+|
+(W_{i}, S_{i})
+=
+(0,0)
+\]</span></p>
+<p>Em que <span class="math inline">\((W_{i}, S_{i})\)</span> é a
+variável aleatória associada ao estado da cadeia de Markov da i-ésima
+inspeção.</p>
+<p>Aplicando o teorema de Bayes no segundo termo, obtém-se:</p>
+<p><span class="math display">\[
+\frac
+{
+\sum_{k = 0}^{2}
+P
+\left[
+(W_{i}, S_{i})
+=
+(0,0)
+|
+(W_{i - 1}, S_{i - 1})
+=
+(k,0)
+\right]
+P
+\left[
+(W_{i - 1}, S_{i - 1})
+=
+(0,0)
+\right]
+}
+{
+P
+\left[
+(W_{i}, S_{i})
+=
+(0,0)
+\right]
+}
+\]</span></p>
+<p>Onde <span class="math inline">\(P{(W_{i}, S_{i}) = (0,0) | (W_{i -
+1}, S_{i - 1})} = (k,0)\)</span> é a probabilidade de transição <span class="math inline">\(P_{(k,0)(0,0)}, k = 0, 1, 2\)</span>, pelas
+propriedades da distribuição estacionária, temos:</p>
+<p><span class="math display">\[
+P(W_{i - 1}, S_{i - 1}) = (k,0)
+=
+P(W_{i}, S_{i}) = (k,0)
+=
+\pi(k,0)
+\]</span></p>
+<p>Dessa maneira, podemos achar todos os valores de <span class="math inline">\(p_{L}(w,s)\)</span>:</p>
+<p><span class="math display">\[
+p_{L}(0,0)
+=
+\frac
+{
+\left[
+\pi(0,0)
++
+\pi(1,0)
++
+\pi(2,0)
+\right]
++
+P_{(0,0)(0,0)}
+}
+{
+\pi(0,0)
+}
+\]</span></p>
+<p><span class="math display">\[
+p_{L}(0,0)
+=
+\frac
+{
+\left[
+\pi(0,0)
++
+\pi(1,0)
++
+\pi(2,0)
+\right]
++
+P_{(0,0)(0,1)}
+}
+{
+\pi(0,1)
+}
+\]</span></p>
+<p><span class="math display">\[
+p_{L}(0,0)
+=
+\frac
+{
+\left[
+\pi(0,0)
++
+\pi(1,0)
++
+\pi(2,0)
+\right]
++
+P_{(0,0)(1,0)}
+}
+{
+\pi(1,0)
+}
+\]</span></p>
+<p><span class="math display">\[
+p_{L}(0,0)
+=
+\frac
+{
+\left[
+\pi(0,0)
++
+\pi(1,0)
++
+\pi(2,0)
+\right]
++
+P_{(0,0)(1,1)}
+}
+{
+\pi(1,1)
+}
+\]</span></p>
+<p><span class="math display">\[
+p_{L}(2,0)
+=
+0
+\]</span></p>
+<p><span class="math display">\[
+p_{L}(2,1)
+=
+0
+\]</span></p>
+<p><br></p>
+</div>
+<div id="custo-dos-estados" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills"><strong>Custo dos Estados</strong></h4>
+<p>A estrutura de custo considerada é similar áquela adotada por e em
+trabalhos anteriores. Consideram três componentes de custo:</p>
+<ul>
+<li><p>Custo de inspeção</p></li>
+<li><p>Custo de Ajuste</p></li>
+<li><p>Custo de envio de item não-conforme ao mercado. Adotamos a
+seguinte notação:</p></li>
+<li><p><span class="math inline">\(c_{ìnspeção}\)</span> <span class="math inline">\(\rightarrow\)</span> É o custo de classificação de
+um item inspecionado e está presente em todos os estados da
+cadeia;</p></li>
+<li><p><span class="math inline">\(c_{ajuste}\)</span> <span class="math inline">\(\rightarrow\)</span> É o custo de ajustar o
+processo.</p></li>
+<li><p><span class="math inline">\(c_{descarte(c)}\)</span> <span class="math inline">\(\rightarrow\)</span> Custo de descartar item
+conforme;</p></li>
+<li><p><span class="math inline">\(c_{descarte(nc)}\)</span> <span class="math inline">\(\rightarrow\)</span> Custo de descartar item não
+conforme;</p></li>
+<li><p><span class="math inline">\(c_{(nc)}\)</span> <span class="math inline">\(\rightarrow\)</span> É o custo de itme defeituoso
+que segue para o consumidor final ou para as próximas etapas do
+processo;</p></li>
+</ul>
+<p>Os componentes <span class="math inline">\(c_{s.nc}\)</span> <span class="math inline">\(c_{s.c}\)</span> são usados nas situações em que
+os itens descartados são submetidos a processos de reaproveitamento com
+custos diferenciados entre itens conformes e não-conformes. No caso de
+os itens inspecionados serem simplesmente descartados, deve-se utiilizar
+o custo unitário de produção, desconsiderado o sistema de controle.</p>
+<p>A expressão geral do custo esperado de cada estado (w,s), w = 0, 1, 2
+e s = 0, 1 é dada por:</p>
+<ul>
+<li><span class="math inline">\(\phi (w,s) = c_{insp} + \varepsilon
+(w,s) + \theta (w,s) + \varphi (w,s)\)</span></li>
+</ul>
+<p>em que:</p>
+<ul>
+<li><span class="math inline">\(\varepsilon (w,s)\)</span> <span class="math inline">\(\rightarrow\)</span> É o custo esperado por ciclo
+referente aos itens não-conformes dentre os m - 1 ou L - 1 itens não
+inspecoinados que são enviados aao mercado ou às próximas etapas da
+produção;</li>
+<li><span class="math inline">\(\theta (w,s)\)</span> <span class="math inline">\(\rightarrow\)</span> É o custo esperado por ciclo
+relacionado ao item inspecionado, descartado;</li>
+<li><span class="math inline">\(\varphi (w,s)\)</span> <span class="math inline">\(\rightarrow\)</span> É o custo de ajuste do
+processo de produção por ciclo. Para <span class="math inline">\(\forall\)</span></li>
+</ul>
+<p><br></p>
+<div id="custo-dos-estados-00-e-01" class="section level5">
+<h5><strong>Custo dos estados (0,0) e (0,1)</strong></h5>
+<p>O item é inspecionado é classificado como conforme, mas, devido aos
+erros de classificação, ele pode ser realmente conforme ou não-conforme.
+A probabilidade do item inspecionado, declarado conforme, ser realmente
+conforme é:</p>
+<p><span class="math display">\[
+P \{ X = 1 \mid Y = 1, Z = 1 \}
+=
+\frac
+{
+P \{ X = 1, Y = 1 \mid Z = 1 \}
+}
+{
+P \{ Y = 1 \mid Z = 1 \}
+}
+=
+\frac
+{
+p_{(+)}
+(1 - \alpha)
+}
+{
+p_{(AS)}
+}
+\]</span></p>
+<p>E de ser realmente não-conforme é:</p>
+<p><span class="math display">\[
+P \{ X = 0 \mid Y = 1, Z = 1 \}
+=
+\frac
+{
+P \{ X = 0, Y = 1 \mid Z = 1 \}
+}
+{
+P \{ Y = 1 \mid Z = 1 \}
+}
+=
+\frac
+{
+(1 - p_{(+)})
+\beta
+}
+{
+p_{(AS)}
+}
+\]</span></p>
+<p>Para o estado <span class="math inline">\((0, 0)\)</span>:</p>
+<p><span class="math display">\[
+\xi (0,0)
+=
+c_{(nc)}
+\left[
+p_{m}(0,0)
+(m - 1)
+(1 - p_{(+)})
++
+p_{L}(0,0)
+(L - 1)
+(1 - p_{(+)})
+\right]
+\]</span></p>
+<p><span class="math display">\[
+\theta(0, 0)
+=
+c_{descarte(c)}
+\frac
+{
+p_{(+)} \alpha
+}
+{1 - p_{(AS)}
+}
++
+c_{descarte(nc)}
+\frac
+{
+(1 - p_{(+)})
+(1 - \beta)
+}
+{
+1 - p_{(AS)}
+}
+\]</span></p>
+<p><span class="math display">\[
+\phi(0, 0)
+=
+c_{ìnspeção}
++
+\xi(0, 0)
++
+\theta(0, 0)
++
+c_{ajuste}
+\]</span></p>
+<p>Para o estado <span class="math inline">\((0, 1)\)</span>:</p>
+<p><span class="math display">\[
+\xi (0,1)
+=
+c_{(nc)}
+\left[
+p_{m}(0,1)
+(m - 1)
+(1 - p_{(+)})
++
+p_{L}(0,1)
+(L - 1)
+(1 - p_{(+)})
+\right]
+\]</span></p>
+<p><span class="math display">\[
+\theta(0, 1)
+=
+c_{descarte(c)}
+\frac
+{
+p_{(+)} (1 - \alpha)
+}
+{
+p_{(AS)}
+}
++
+c_{descarte(nc)}
+\frac
+{
+(1 - p_{(+)})
+(1 - \beta)
+}
+{
+p_{(AS)}
+}
+\]</span></p>
+<p><span class="math display">\[
+\phi(0, 1)
+=
+c_{ìnspeção}
++
+\xi(0, 1)
++
+\theta(0, 1)
+\]</span></p>
+<p><br></p>
+</div>
+<div id="custo-dos-estados-10-e-11" class="section level5">
+<h5><strong>Custo dos estados (1,0) e (1,1)</strong></h5>
+<p>Quando a fração de conformidade se modifica durante o ciclo corrente,
+pelo menos um item inspecionado é produzido com o processo fora de
+controle. O ponto de mudança pode ocorrer em qualquer instante entre o
+primeiro e o último item produzido durante o ciclo. Em ciclos com
+intervalo entre amostragens de comprimento <span class="math inline">\(m\)</span>, a probabilidade de a mudança de estado
+ocorrer no instante <span class="math inline">\(t\)</span> é dada
+por:</p>
+<p><span class="math display">\[
+q_{m}(t) =
+\frac
+{
+(1 - \pi)^{t - 1}
+\pi
+}
+{
+1 - (1 - \pi)^L
+}
+, \quad t = 1, \dots, L
+\]</span></p>
+<p>Analogamente, quando o intervalo entre inspeções tem comprimento
+<span class="math inline">\(L\)</span>, essa probabilidade é:</p>
+<p><span class="math display">\[
+q_{L}(t) =
+\frac
+{
+(1 - \pi)^{t - 1}
+\pi
+}
+{
+1 - (1 - \pi)^m
+}
+, \quad t = 1, \dots, m
+\]</span></p>
+<p>Para o estado <span class="math inline">\((1, 0)\)</span>:</p>
+<p><span class="math display">\[
+\xi(1, 0)
+=
+c_{(nc)}
+\Bigg[
+p_{m}(1, 0)
+\sum_{t = 1}^{m}
+q_{m}(t)
+\big[
+(t - 1)
+(1 - p_{(+)})
++
+(m - t)
+(1 - p_{(-)})
+\big]
++
+p_L(1, 0)
+\sum_{t=1}^{L}
+q_{L}(t)
+\big[
+(t - 1)
+(1 - p_{(+)})
++
+(L - t)
+(1 - p_{(-)})
+\big]
+\Bigg]
+\]</span></p>
+<p><span class="math display">\[
+\theta(1, 0)
+=
+c_{descarte(c)}
+\frac
+{
+p_{(-)}
+\alpha
+}
+{
+1 - p_{(AF)}
+}
++
+c_{descarte(nc)}
+\frac
+{
+(1 - p_{(-)})
+(1 - \beta)
+}
+{
+1 - p_{(AF)}
+}
+\]</span></p>
+<p><span class="math display">\[
+\phi(1, 0)
+=
+c_{ìnspeção}
++
+\xi(1, 0)
++
+\theta(1, 0)
++
+c_{ajuste}
+\]</span></p>
+<p>Para o estado <span class="math inline">\((1, 1)\)</span>:</p>
+<p><span class="math display">\[
+\xi(1, 1)
+=
+c_{(nc)}
+\Bigg[
+p_{m}(1, 1)
+\sum_{t = 1}^{m}
+q_{m}(t)
+\big[
+(t - 1)
+(1 - p_{(+)})
++
+(m - t)
+(1 - p_{(-)})
+\big]
++
+p_L(1, 1)
+\sum_{t=1}^{L}
+q_{L}(t)
+\big[
+(t - 1)
+(1 - p_{(+)})
++
+(L - t)
+(1 - p_{(-)})
+\big]
+\Bigg]
+\]</span></p>
+<p><span class="math display">\[
+\theta(1, 1)
+=
+c_{descarte(c)}
+\frac
+{
+p_{(-)}
+(1 - \alpha)
+}
+{
+p_{(AF)}
+}
++
+c_{descarte(nc)}
+\frac
+{
+(1 - p_{(-)})
+\beta
+}
+{
+p_{(AF)}
+}
+\]</span></p>
+<p><span class="math display">\[
+\phi(1, 1)
+=
+c_{ìnspeção}
++
+\xi(1, 1)
++
+\theta(1, 1)
+\]</span></p>
+<p><br></p>
+</div>
+<div id="custo-dos-estados-2-0-e-2-1" class="section level5">
+<h5>Custo dos Estados <strong>(2, 0) e (2, 1)</strong></h5>
+<p>Para o estado <span class="math inline">\((2, 0)\)</span>:</p>
+<p><span class="math display">\[
+\xi(2, 0)
+=
+c_{(nc)}
+(1 - p_{(-)})
+(m - 1)
+\]</span></p>
+<p><span class="math display">\[
+\theta(2, 0)
+=
+c_{descarte(c)}
+\frac
+{
+p_{(-)}
+\alpha
+}
+{
+1 - p_{(AF)}
+}
++
+c_{descarte(nc)}
+\frac
+{ (1 - p_{(-)})
+(1 - \beta)
+}
+{
+1 - p_{(AF)}
+}
+\]</span></p>
+<p><span class="math display">\[
+\phi(2, 0)
+=
+c_{ìnspeção}
++
+\xi(2, 0)
++
+\theta(2, 0)
++
+c_{ajuste}
+\]</span></p>
+<p>Para o estado <span class="math inline">\((2, 1)\)</span>:</p>
+<p><span class="math display">\[
+\xi(2, 0)
+=
+c_{(nc)}
+(1 - p_{(-)})
+(m - 1)
+\]</span></p>
+<p><span class="math display">\[
+\theta(2, 0)
+=
+c_{descarte(c)}
+\frac
+{
+p_{(-)}
+(1 - \alpha)
+}
+{
+p_{(AF)}
+}
++
+c_{descarte(nc)}
+\frac
+{ (1 - p_{(-)})
+\beta
+}
+{
+p_{(AF)}
+}
+\]</span></p>
+<p><span class="math display">\[
+\phi(2, 1)
+=
+c_{ìnspeção}
++
+\xi(2, 1)
++
+\theta(2, 1)
+\]</span></p>
+<p><br></p>
+</div>
+</div>
+<div id="funções-utilizadas" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills"><strong>Funções Utilizadas</strong></h4>
+<div id="funções-amostrais" class="section level5">
+<h5><strong>Funções Amostrais</strong></h5>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="do">## Função 1: Função para calcular a média de um vetor numérico</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>calcular.media <span class="ot">&lt;-</span> <span class="cf">function</span>(vetor) {</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  soma <span class="ot">&lt;-</span> <span class="fu">sum</span>(vetor) <span class="do">## Soma todos os elementos do vetor</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(vetor) <span class="do">## Obtém o número de elementos no vetor</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  media <span class="ot">&lt;-</span> soma <span class="sc">/</span> n <span class="do">## Calcula a média dividindo a soma pelo número de elementos</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="fu">return</span>(media) <span class="do">## Retorna o valor da média</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>}</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="do">## Função 2: Função para calcular a variância de um vetor numérico</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>calcular.variancia <span class="ot">&lt;-</span> <span class="cf">function</span>(vetor) {</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  media <span class="ot">&lt;-</span> <span class="fu">calcula_media</span>(vetor) <span class="do">## Calcula a média utilizando a função anterior</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  desvios <span class="ot">&lt;-</span> vetor <span class="sc">-</span> media <span class="do">## Calcula os desvios de cada elemento em relação à média</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  quadrados <span class="ot">&lt;-</span> desvios<span class="sc">^</span><span class="dv">2</span> <span class="do">## Eleva os desvios ao quadrado</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  variancia <span class="ot">&lt;-</span> <span class="fu">sum</span>(quadrados) <span class="sc">/</span> (<span class="fu">length</span>(vetor) <span class="sc">-</span> <span class="dv">1</span>) <span class="do">## Calcula a variância dividindo a soma dos quadrados pelo número de elementos menos 1</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="fu">return</span>(variancia) <span class="do">## Retorna o valor da variância</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>}</span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="do">## Função 3: Função para calcular a mediana de um vetor numérico</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>calcular.mediana <span class="ot">&lt;-</span> <span class="cf">function</span>(vetor) {</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  vetor <span class="ot">&lt;-</span> <span class="fu">sort</span>(vetor) <span class="do">## Ordena o vetor em ordem crescente</span></span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(vetor) <span class="do">## Obtém o número de elementos no vetor</span></span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>  <span class="cf">if</span> (n <span class="sc">%%</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>) { <span class="do">## Verifica se o número de elementos é par</span></span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>    mediana <span class="ot">&lt;-</span> (vetor[n<span class="sc">/</span><span class="dv">2</span>] <span class="sc">+</span> vetor[n<span class="sc">/</span><span class="dv">2</span> <span class="sc">+</span> <span class="dv">1</span>]) <span class="sc">/</span> <span class="dv">2</span> <span class="do">## Calcula a mediana como a média dos dois valores centrais</span></span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a>  } <span class="cf">else</span> { <span class="do">## Caso o número de elementos seja ímpar</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>    mediana <span class="ot">&lt;-</span> vetor[(n <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> <span class="dv">2</span>] <span class="do">## Seleciona o elemento central como a mediana</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>  }</span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>  <span class="fu">return</span>(mediana) <span class="do">## Retorna o valor da mediana</span></span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>}</span></code></pre></div>
+<p><br></p>
+</div>
+<div id="funções-de-operações-matriciais" class="section level5">
+<h5><strong>Funções de Operações Matriciais</strong></h5>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="do">## Função 4: Função para gerar uma matriz identidade de tamanho n</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>gerar.matriz.identidade <span class="ot">&lt;-</span> <span class="cf">function</span>(n) {</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  identidade <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="dv">1</span>, n) <span class="do">## Utiliza a função diag para criar uma matriz identidade de tamanho n</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="fu">return</span>(identidade) <span class="do">## Retorna a matriz identidade gerada</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>}</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="do">## Função 5: Função para transpor uma matriz</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>transpor.matriz <span class="ot">&lt;-</span> <span class="cf">function</span>(matriz) {</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  transposta <span class="ot">&lt;-</span> <span class="fu">t</span>(matriz) <span class="do">## Transpõe a matriz utilizando a função t</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="fu">return</span>(transposta) <span class="do">## Retorna a matriz transposta</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="do">## Função 6: Função para multiplicar duas matrizes</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>multiplicar.matriz <span class="ot">&lt;-</span> <span class="cf">function</span>(matriz1, matriz2) {</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">ncol</span>(matriz1) <span class="sc">!=</span> <span class="fu">nrow</span>(matriz2)) { <span class="do">## Verifica se o número de colunas da primeira matriz é igual ao número de linhas da segunda</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;Dimensões incompatíveis para multiplicação.&quot;</span>) <span class="do">## Retorna um erro caso as dimensões sejam incompatíveis</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>  }</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>  produto <span class="ot">&lt;-</span> matriz1 <span class="sc">%*%</span> matriz2 <span class="do">## Realiza a multiplicação matricial utilizando o operador %*%</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>  <span class="fu">return</span>(produto) <span class="do">## Retorna o resultado da multiplicação</span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>}</span></code></pre></div>
+<p><br></p>
+</div>
+<div id="funções-da-distribuição-geométrica" class="section level5">
+<h5><strong>Funções da Distribuição Geométrica</strong></h5>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## Função 7: Calcula a probabilidade de X = k para uma distribuição geométrica</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>fdp.geometrica <span class="ot">&lt;-</span> <span class="cf">function</span>(k, p) {</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="cf">if</span> (k <span class="sc">&lt;</span> <span class="dv">1</span>) { <span class="do">## Verifica se k é menor que 1 (valores inválidos para a distribuição geométrica)</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;k deve ser um número inteiro maior ou igual a 1.&quot;</span>) <span class="do">## Retorna um erro se k for inválido</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>  }</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  fdp <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p)<span class="sc">^</span>(k <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> p <span class="do">## Fórmula da probabilidade da distribuição geométrica</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>  <span class="fu">return</span>(fdp) <span class="do">## Retorna a probabilidade calculada</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>}</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">## Função 8: Calcula a função de distribuição acumulada (CDF) para X &lt;= k</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>fda.geometrica <span class="ot">&lt;-</span> <span class="cf">function</span>(k, p) {</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="cf">if</span> (k <span class="sc">&lt;</span> <span class="dv">1</span>) { <span class="do">## Verifica se k é menor que 1 (valores inválidos para a CDF da distribuição geométrica)</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;k deve ser um número inteiro maior ou igual a 1.&quot;</span>) <span class="do">## Retorna um erro se k for inválido</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  }</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  fda <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (<span class="dv">1</span> <span class="sc">-</span> p)<span class="sc">^</span>k <span class="do">## Fórmula da CDF da distribuição geométrica</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  <span class="fu">return</span>(fda) <span class="do">## Retorna o valor da CDF</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>}</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="do">## Função 9: Gera n valores aleatórios seguindo a distribuição geométrica</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>gerador.geometrica <span class="ot">&lt;-</span> <span class="cf">function</span>(n, p) {</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>  <span class="cf">if</span> (n <span class="sc">&lt;=</span> <span class="dv">0</span>) { <span class="do">## Verifica se n é menor ou igual a zero</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;n deve ser maior que zero.&quot;</span>) <span class="do">## Retorna um erro se n for inválido</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>  }</span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>  valores <span class="ot">&lt;-</span> <span class="fu">numeric</span>(n) <span class="do">## Cria um vetor vazio para armazenar os valores gerados</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) { <span class="do">## Inicia um loop para gerar n valores</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>    u <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>) <span class="do">## Gera um número aleatório uniforme entre 0 e 1</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>    valores[i] <span class="ot">&lt;-</span> <span class="fu">ceiling</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> u) <span class="sc">/</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> p)) <span class="do">## Aplica a fórmula inversa da CDF para gerar o valor geométrico</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>  }</span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>  <span class="fu">return</span>(valores) <span class="do">## Retorna os valores gerados</span></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>}</span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a><span class="do">## Função 10: Calcula a média teórica da distribuição geométrica</span></span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>media.geometrica <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {</span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>  media <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">/</span> p <span class="do">## Fórmula para a média teórica da distribuição geométrica</span></span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>  <span class="fu">return</span>(media) <span class="do">## Retorna a média calculada</span></span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a>}</span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" tabindex="-1"></a><span class="do">## Função 11: Calcula a variância teórica da distribuição geométrica</span></span>
+<span id="cb4-39"><a href="#cb4-39" tabindex="-1"></a>variancia.geometrica <span class="ot">&lt;-</span> <span class="cf">function</span>(p) {</span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1"></a>  variancia <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p) <span class="sc">/</span> (p<span class="sc">^</span><span class="dv">2</span>) <span class="do">## Fórmula para a variância teórica da distribuição geométrica</span></span>
+<span id="cb4-41"><a href="#cb4-41" tabindex="-1"></a>  <span class="fu">return</span>(variancia) <span class="do">## Retorna a variância calculada</span></span>
+<span id="cb4-42"><a href="#cb4-42" tabindex="-1"></a>}</span></code></pre></div>
+<p><br></p>
+</div>
+<div id="funções-do-modelo-probabilístico" class="section level5">
+<h5><strong>Funções do Modelo Probabilístico</strong></h5>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="do">## Função 12: Calcula p_(AS) - Probabilidade de Não Ajustar o processo Sob Controle</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>calcular.p.AS <span class="ot">&lt;-</span> <span class="cf">function</span>(p1, alfa, beta) {</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="do">## p1: probabilidade de conformidade do item sob controle (p_(+))</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="do">## alfa: probabilidade de classificar item conforme como não conforme</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="do">## beta: probabilidade de classificar item não conforme como conforme</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  termo<span class="fl">.1</span> <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p1) <span class="sc">*</span> beta <span class="do">## Probabilidade de itens não conformes classificados como conformes</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  termo<span class="fl">.2</span> <span class="ot">&lt;-</span> p1 <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> alfa) <span class="do">## Probabilidade de itens conformes classificados como conformes</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  p.AS <span class="ot">&lt;-</span> termo<span class="fl">.1</span> <span class="sc">+</span> termo<span class="fl">.2</span> <span class="do">## Soma os termos para calcular p_(AS)</span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a>  <span class="fu">return</span>(p.AS) <span class="do">## Retorna p_(AS)</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>}</span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="do">## Função 13: Calcula p_(AF) - Probabilidade de Não Ajustar o processo Fora de Controle</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>calcular.p.AF <span class="ot">&lt;-</span> <span class="cf">function</span>(p2, alfa, beta) {</span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a>  <span class="do">## p2: probabilidade de conformidade do item fora de controle (p_(-))</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>  <span class="do">## alfa: probabilidade de classificar item conforme como não conforme</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>  <span class="do">## beta: probabilidade de classificar item não conforme como conforme</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>  termo<span class="fl">.1</span> <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p2) <span class="sc">*</span> beta <span class="do">## Probabilidade de itens não conformes classificados como conformes</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>  termo<span class="fl">.2</span> <span class="ot">&lt;-</span> p2 <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> alfa) <span class="do">## Probabilidade de itens conformes classificados como conformes</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>  p.AF <span class="ot">&lt;-</span> termo<span class="fl">.1</span> <span class="sc">+</span> termo<span class="fl">.2</span> <span class="do">## Soma os termos para calcular p_(AF)</span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>  <span class="fu">return</span>(p.AF) <span class="do">## Retorna p_(AF)</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>}</span></code></pre></div>
+<p><br></p>
+</div>
+<div id="funções-da-cadeia-de-markov" class="section level5">
+<h5><strong>Funções da Cadeia de Markov</strong></h5>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="do">## Função 14: Calcula a probabilidade do processo continuar &quot;Sob Controle&quot; por L ciclos, dado que começa &quot;Sob Controle&quot;</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>calc.prob.sob.controle.L <span class="ot">&lt;-</span> <span class="cf">function</span>(pi, L) {</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="do">## pi: probabilidade de transição de &quot;Fora de Controle&quot; para &quot;Sob Controle&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="do">## L: número de ciclos correntes</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  prob.sob.controle.L <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> pi)<span class="sc">^</span>L <span class="do">## Calcula a probabilidade de o processo continuar &quot;Sob Controle&quot; por L ciclos</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>  <span class="fu">return</span>(prob.sob.controle.L) <span class="do">## Retorna a probabilidade calculada</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>}</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="do">## Função 15: Calcula a probabilidade do processo continuar &quot;Sob Controle&quot; por m ciclos, dado que começa &quot;Sob Controle&quot;</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>calc.prob.sob.controle.m <span class="ot">&lt;-</span> <span class="cf">function</span>(pi, m) {</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="do">## pi: probabilidade de transição de &quot;Fora de Controle&quot; para &quot;Sob Controle&quot;</span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  <span class="do">## m: número de ciclos correntes</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  prob.sob.controle.m <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> pi)<span class="sc">^</span>m <span class="do">## Calcula a probabilidade de o processo continuar &quot;Sob Controle&quot; por m ciclos</span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  <span class="fu">return</span>(prob.sob.controle.m) <span class="do">## Retorna a probabilidade calculada</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>}</span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="do">## Função 16: Calcula a probabilidade de o processo passar para &quot;Fora de Controle&quot; após L ciclos, dado que começa &quot;Sob Controle&quot;</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>calc.prob.fora.controle.L <span class="ot">&lt;-</span> <span class="cf">function</span>(pi, L) {</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>  <span class="do">## pi: probabilidade de transição de &quot;Fora de Controle&quot; para &quot;Sob Controle&quot;</span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>  <span class="do">## L: número de ciclos correntes</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>  prob.fora.controle.L <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (<span class="dv">1</span> <span class="sc">-</span> pi)<span class="sc">^</span>L <span class="do">## Calcula a probabilidade de o processo passar para &quot;Fora de Controle&quot; após L ciclos</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>  <span class="fu">return</span>(prob.fora.controle.L) <span class="do">## Retorna a probabilidade calculada</span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>}</span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="do">## Função 17: Calcula a probabilidade de o processo passar para &quot;Fora de Controle&quot; após m ciclos, dado que começa &quot;Sob Controle&quot;</span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>calc.prob.fora.controle.m <span class="ot">&lt;-</span> <span class="cf">function</span>(pi, m) {</span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a>  <span class="do">## pi: probabilidade de transição de &quot;Fora de Controle&quot; para &quot;Sob Controle&quot;</span></span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a>  <span class="do">## m: número de ciclos correntes</span></span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a>  prob.fora.controle.m <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (<span class="dv">1</span> <span class="sc">-</span> pi)<span class="sc">^</span>m <span class="do">## Calcula a probabilidade de o processo passar para &quot;Fora de Controle&quot; após m ciclos</span></span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a>  <span class="fu">return</span>(prob.fora.controle.m) <span class="do">## Retorna a probabilidade calculada</span></span>
+<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a>}</span>
+<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a></span>
+<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a>calc.matriz.prob.markov <span class="ot">&lt;-</span> <span class="cf">function</span>(p.AS, p.AF, p.AS.L, p.AF.L, p.AS.m, p.AF.m) {</span>
+<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a>  </span>
+<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a>  <span class="do">## Probabilidades de transição para os diferentes estados:</span></span>
+<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a>  P.<span class="fl">00.00</span> <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p.AS) <span class="sc">*</span> p.AS.L</span>
+<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a>  P.<span class="fl">00.01</span> <span class="ot">&lt;-</span> p.AS <span class="sc">*</span> p.AS.L</span>
+<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a>  P.<span class="fl">00.10</span> <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p.AF) <span class="sc">*</span> p.AF.L</span>
+<span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a>  P.<span class="fl">00.11</span> <span class="ot">&lt;-</span> p.AF <span class="sc">*</span> p.AF.L</span>
+<span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a>  P.<span class="fl">00.20</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-45"><a href="#cb6-45" tabindex="-1"></a>  P.<span class="fl">00.21</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-46"><a href="#cb6-46" tabindex="-1"></a></span>
+<span id="cb6-47"><a href="#cb6-47" tabindex="-1"></a>  P.<span class="fl">01.00</span> <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p.AS) <span class="sc">*</span> p.AS.m</span>
+<span id="cb6-48"><a href="#cb6-48" tabindex="-1"></a>  P.<span class="fl">01.01</span> <span class="ot">&lt;-</span> p.AS <span class="sc">*</span> p.AS.m</span>
+<span id="cb6-49"><a href="#cb6-49" tabindex="-1"></a>  P.<span class="fl">01.10</span> <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p.AF) <span class="sc">*</span> p.AF.m</span>
+<span id="cb6-50"><a href="#cb6-50" tabindex="-1"></a>  P.<span class="fl">01.11</span> <span class="ot">&lt;-</span> p.AF <span class="sc">*</span> p.AF.m</span>
+<span id="cb6-51"><a href="#cb6-51" tabindex="-1"></a>  P.<span class="fl">01.20</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-52"><a href="#cb6-52" tabindex="-1"></a>  P.<span class="fl">01.21</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-53"><a href="#cb6-53" tabindex="-1"></a></span>
+<span id="cb6-54"><a href="#cb6-54" tabindex="-1"></a>  P.<span class="fl">10.00</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-55"><a href="#cb6-55" tabindex="-1"></a>  P.<span class="fl">10.01</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-56"><a href="#cb6-56" tabindex="-1"></a>  P.<span class="fl">10.10</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-57"><a href="#cb6-57" tabindex="-1"></a>  P.<span class="fl">10.11</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-58"><a href="#cb6-58" tabindex="-1"></a>  P.<span class="fl">10.20</span> <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> p.AF</span>
+<span id="cb6-59"><a href="#cb6-59" tabindex="-1"></a>  P.<span class="fl">10.21</span> <span class="ot">&lt;-</span> p.AF</span>
+<span id="cb6-60"><a href="#cb6-60" tabindex="-1"></a></span>
+<span id="cb6-61"><a href="#cb6-61" tabindex="-1"></a>  P.<span class="fl">11.00</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-62"><a href="#cb6-62" tabindex="-1"></a>  P.<span class="fl">11.01</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-63"><a href="#cb6-63" tabindex="-1"></a>  P.<span class="fl">11.10</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-64"><a href="#cb6-64" tabindex="-1"></a>  P.<span class="fl">11.11</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-65"><a href="#cb6-65" tabindex="-1"></a>  P.<span class="fl">11.20</span> <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> p.AF</span>
+<span id="cb6-66"><a href="#cb6-66" tabindex="-1"></a>  P.<span class="fl">11.21</span> <span class="ot">&lt;-</span> p.AF</span>
+<span id="cb6-67"><a href="#cb6-67" tabindex="-1"></a></span>
+<span id="cb6-68"><a href="#cb6-68" tabindex="-1"></a>  P.<span class="fl">20.00</span> <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p.AS) <span class="sc">*</span> p.AS.L</span>
+<span id="cb6-69"><a href="#cb6-69" tabindex="-1"></a>  P.<span class="fl">20.01</span> <span class="ot">&lt;-</span> p.AS <span class="sc">*</span> p.AS.L</span>
+<span id="cb6-70"><a href="#cb6-70" tabindex="-1"></a>  P.<span class="fl">20.10</span> <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p.AF) <span class="sc">*</span> p.AF.L</span>
+<span id="cb6-71"><a href="#cb6-71" tabindex="-1"></a>  P.<span class="fl">20.11</span> <span class="ot">&lt;-</span> p.AF <span class="sc">*</span> p.AF.L</span>
+<span id="cb6-72"><a href="#cb6-72" tabindex="-1"></a>  P.<span class="fl">20.20</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-73"><a href="#cb6-73" tabindex="-1"></a>  P.<span class="fl">20.21</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-74"><a href="#cb6-74" tabindex="-1"></a></span>
+<span id="cb6-75"><a href="#cb6-75" tabindex="-1"></a>  P.<span class="fl">21.00</span> <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p.AS) <span class="sc">*</span> p.AS.L</span>
+<span id="cb6-76"><a href="#cb6-76" tabindex="-1"></a>  P.<span class="fl">21.01</span> <span class="ot">&lt;-</span> p.AS <span class="sc">*</span> p.AS.L</span>
+<span id="cb6-77"><a href="#cb6-77" tabindex="-1"></a>  P.<span class="fl">21.10</span> <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p.AF) <span class="sc">*</span> p.AF.L</span>
+<span id="cb6-78"><a href="#cb6-78" tabindex="-1"></a>  P.<span class="fl">21.11</span> <span class="ot">&lt;-</span> p.AF <span class="sc">*</span> p.AF.L</span>
+<span id="cb6-79"><a href="#cb6-79" tabindex="-1"></a>  P.<span class="fl">21.20</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-80"><a href="#cb6-80" tabindex="-1"></a>  P.<span class="fl">21.21</span> <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-81"><a href="#cb6-81" tabindex="-1"></a></span>
+<span id="cb6-82"><a href="#cb6-82" tabindex="-1"></a>  <span class="do">## Matriz de transição com as probabilidades:</span></span>
+<span id="cb6-83"><a href="#cb6-83" tabindex="-1"></a>  matriz <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(</span>
+<span id="cb6-84"><a href="#cb6-84" tabindex="-1"></a>    P.<span class="fl">00.00</span>, P.<span class="fl">00.01</span>, P.<span class="fl">00.10</span>, P.<span class="fl">00.11</span>, P.<span class="fl">00.20</span>, P.<span class="fl">00.21</span>,</span>
+<span id="cb6-85"><a href="#cb6-85" tabindex="-1"></a>    P.<span class="fl">01.00</span>, P.<span class="fl">01.01</span>, P.<span class="fl">01.10</span>, P.<span class="fl">01.11</span>, P.<span class="fl">01.20</span>, P.<span class="fl">01.21</span>,</span>
+<span id="cb6-86"><a href="#cb6-86" tabindex="-1"></a>    P.<span class="fl">10.00</span>, P.<span class="fl">10.01</span>, P.<span class="fl">10.10</span>, P.<span class="fl">10.11</span>, P.<span class="fl">10.20</span>, P.<span class="fl">10.21</span>,</span>
+<span id="cb6-87"><a href="#cb6-87" tabindex="-1"></a>    P.<span class="fl">11.00</span>, P.<span class="fl">11.01</span>, P.<span class="fl">11.10</span>, P.<span class="fl">11.11</span>, P.<span class="fl">11.20</span>, P.<span class="fl">11.21</span>,</span>
+<span id="cb6-88"><a href="#cb6-88" tabindex="-1"></a>    P.<span class="fl">20.00</span>, P.<span class="fl">20.01</span>, P.<span class="fl">20.10</span>, P.<span class="fl">20.11</span>, P.<span class="fl">20.20</span>, P.<span class="fl">20.21</span>,</span>
+<span id="cb6-89"><a href="#cb6-89" tabindex="-1"></a>    P.<span class="fl">21.00</span>, P.<span class="fl">21.01</span>, P.<span class="fl">21.10</span>, P.<span class="fl">21.11</span>, P.<span class="fl">21.20</span>, P.<span class="fl">21.21</span>), <span class="at">nrow =</span> <span class="dv">6</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-90"><a href="#cb6-90" tabindex="-1"></a></span>
+<span id="cb6-91"><a href="#cb6-91" tabindex="-1"></a>  <span class="do">## Nomes das linhas e colunas:</span></span>
+<span id="cb6-92"><a href="#cb6-92" tabindex="-1"></a>  <span class="fu">rownames</span>(matriz) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;(0,0)&quot;</span>, <span class="st">&quot;(0,1)&quot;</span>, <span class="st">&quot;(1,0)&quot;</span>, <span class="st">&quot;(1,1)&quot;</span>, <span class="st">&quot;(2,0)&quot;</span>, <span class="st">&quot;(2,1)&quot;</span>)</span>
+<span id="cb6-93"><a href="#cb6-93" tabindex="-1"></a>  <span class="fu">colnames</span>(matriz) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;(0,0)&quot;</span>, <span class="st">&quot;(0,1)&quot;</span>, <span class="st">&quot;(1,0)&quot;</span>, <span class="st">&quot;(1,1)&quot;</span>, <span class="st">&quot;(2,0)&quot;</span>, <span class="st">&quot;(2,1)&quot;</span>)</span>
+<span id="cb6-94"><a href="#cb6-94" tabindex="-1"></a></span>
+<span id="cb6-95"><a href="#cb6-95" tabindex="-1"></a>  <span class="fu">return</span>(matriz)</span>
+<span id="cb6-96"><a href="#cb6-96" tabindex="-1"></a>}</span></code></pre></div>
+<p><br></p>
+</div>
+<div id="funções-da-distribuição-estacionária" class="section level5">
+<h5><strong>Funções da Distribuição Estacionária</strong></h5>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>calcular_pi <span class="ot">&lt;-</span> <span class="cf">function</span>(P) {</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(P)  <span class="do">## Número de estados</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  I <span class="ot">&lt;-</span> <span class="fu">diag</span>(n) <span class="do">## Cria a matriz Identidade.</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  </span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  P_minus_I <span class="ot">&lt;-</span> P <span class="sc">-</span> I <span class="do">## Substrae a matriz identidade de P</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  </span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="co"># Adicionar a restrição de normalização (soma das probabilidades deve ser 1)</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  <span class="co"># Para isso, adicionamos uma linha de 1&#39;s e uma coluna de 1&#39;s no sistema</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  P_augmented <span class="ot">&lt;-</span> <span class="fu">rbind</span>(P_minus_I, <span class="fu">rep</span>(<span class="dv">1</span>, n))</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  </span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="co"># Agora, adicionamos a restrição de normalização, que é uma linha de 1&#39;s</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  P_augmented <span class="ot">&lt;-</span> <span class="fu">cbind</span>(P_augmented, <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n <span class="sc">-</span> <span class="dv">1</span>), <span class="dv">1</span>))</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  </span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>  <span class="co"># Vetor de constantes (todas as constantes são 0, exceto a última que é 1)</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n), <span class="dv">1</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>  </span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>  <span class="co"># Resolver o sistema linear (P_augmented) %*% pi = b</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  pi <span class="ot">&lt;-</span> <span class="fu">solve</span>(P_augmented, b)</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>  </span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>  <span class="fu">return</span>(pi)</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>}</span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>calcular_p_L <span class="ot">&lt;-</span> <span class="cf">function</span>(P, pi) {</span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(P)</span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>  p_L <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow =</span> n, <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a>  </span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>    <span class="cf">if</span> (i <span class="sc">&lt;=</span> <span class="dv">3</span>) {</span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>      soma_pi <span class="ot">&lt;-</span> <span class="fu">sum</span>(pi[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a>      p_L[i] <span class="ot">&lt;-</span> <span class="fu">sum</span>(P[i, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="sc">*</span> pi[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">/</span> pi[i]</span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a>      p_L[i] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a>    }</span>
+<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a>  }</span>
+<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a>  </span>
+<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a>  <span class="fu">return</span>(p_L)</span>
+<span id="cb7-37"><a href="#cb7-37" tabindex="-1"></a>}</span></code></pre></div>
+<p><br></p>
+</div>
+<div id="custos-dos-estados" class="section level5">
+<h5><strong>Custos dos Estados</strong></h5>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>calcular.custos <span class="ot">&lt;-</span> <span class="cf">function</span>(p_mais, p_menos, alfa, beta, c_inspecao, c_ajuste, </span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>                             c_desc_c, c_desc_nc, c_nc, p_AS, p_AF, p_L, pi, L, m) {</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="co"># Função auxiliar para calcular q.m(t) ou q.L(t)</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  calcular.q <span class="ot">&lt;-</span> <span class="cf">function</span>(t, pi, comprimento) {</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>    numerador <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> pi)<span class="sc">^</span>(t <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> pi</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>    denominador <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">-</span> (<span class="dv">1</span> <span class="sc">-</span> pi)<span class="sc">^</span>comprimento</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    <span class="fu">return</span>(numerador <span class="sc">/</span> denominador)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  }</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  </span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>  <span class="co"># Cálculo para o estado (0,0)</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>  xi_00 <span class="ot">&lt;-</span> c_nc <span class="sc">*</span> ((p_AF[<span class="dv">1</span>] <span class="sc">*</span> (m <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_mais)) <span class="sc">+</span> (p_L[<span class="dv">1</span>] <span class="sc">*</span> (L <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_mais)))</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  theta_00 <span class="ot">&lt;-</span> (c_desc_c <span class="sc">*</span> (p_mais <span class="sc">*</span> alfa) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> p_AS)) <span class="sc">+</span> </span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>              (c_desc_nc <span class="sc">*</span> ((<span class="dv">1</span> <span class="sc">-</span> p_mais) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> beta)) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> p_AS))</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>  phi_00 <span class="ot">&lt;-</span> c_inspecao <span class="sc">+</span> xi_00 <span class="sc">+</span> theta_00 <span class="sc">+</span> c_ajuste</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>  </span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>  <span class="co"># Cálculo para o estado (0,1)</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>  xi_01 <span class="ot">&lt;-</span> c_nc <span class="sc">*</span> ((p_AF[<span class="dv">2</span>] <span class="sc">*</span> (m <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_mais)) <span class="sc">+</span> (p_L[<span class="dv">2</span>] <span class="sc">*</span> (L <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_mais)))</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>  theta_01 <span class="ot">&lt;-</span> (c_desc_c <span class="sc">*</span> (p_mais <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> alfa)) <span class="sc">/</span> p_AS) <span class="sc">+</span> </span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>              (c_desc_nc <span class="sc">*</span> ((<span class="dv">1</span> <span class="sc">-</span> p_mais) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> beta)) <span class="sc">/</span> p_AS)</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>  phi_01 <span class="ot">&lt;-</span> c_inspecao <span class="sc">+</span> xi_01 <span class="sc">+</span> theta_01</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  </span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>  <span class="co"># Cálculo para o estado (1,0)</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>  xi_10 <span class="ot">&lt;-</span> c_nc <span class="sc">*</span> (</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>    p_AF[<span class="dv">3</span>] <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>m, <span class="cf">function</span>(t) <span class="fu">calcular.q</span>(t, pi, m) <span class="sc">*</span> </span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a>                             ((t <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_mais) <span class="sc">+</span> (m <span class="sc">-</span> t) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_menos)))) <span class="sc">+</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>    p_L[<span class="dv">3</span>] <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>L, <span class="cf">function</span>(t) <span class="fu">calcular.q</span>(t, pi, L) <span class="sc">*</span> </span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>                             ((t <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_mais) <span class="sc">+</span> (L <span class="sc">-</span> t) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_menos))))</span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>  )</span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>  theta_10 <span class="ot">&lt;-</span> (c_desc_c <span class="sc">*</span> (p_menos <span class="sc">*</span> alfa) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> p_AF)) <span class="sc">+</span> </span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>              (c_desc_nc <span class="sc">*</span> ((<span class="dv">1</span> <span class="sc">-</span> p_menos) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> beta)) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> p_AF))</span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>  phi_10 <span class="ot">&lt;-</span> c_inspecao <span class="sc">+</span> xi_10 <span class="sc">+</span> theta_10 <span class="sc">+</span> c_ajuste</span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a>  </span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a>  <span class="co"># Cálculo para o estado (1,1)</span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>  xi_11 <span class="ot">&lt;-</span> c_nc <span class="sc">*</span> (</span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a>    p_AF[<span class="dv">4</span>] <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>m, <span class="cf">function</span>(t) <span class="fu">calcular.q</span>(t, pi, m) <span class="sc">*</span> </span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a>                             ((t <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_mais) <span class="sc">+</span> (m <span class="sc">-</span> t) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_menos)))) <span class="sc">+</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a>    p_L[<span class="dv">4</span>] <span class="sc">*</span> <span class="fu">sum</span>(<span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span>L, <span class="cf">function</span>(t) <span class="fu">calcular.q</span>(t, pi, L) <span class="sc">*</span> </span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a>                             ((t <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_mais) <span class="sc">+</span> (L <span class="sc">-</span> t) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_menos))))</span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a>  )</span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a>  theta_11 <span class="ot">&lt;-</span> (c_desc_c <span class="sc">*</span> (p_menos <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> alfa)) <span class="sc">/</span> p_AF) <span class="sc">+</span> </span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a>              (c_desc_nc <span class="sc">*</span> ((<span class="dv">1</span> <span class="sc">-</span> p_menos) <span class="sc">*</span> beta) <span class="sc">/</span> p_AF)</span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a>  phi_11 <span class="ot">&lt;-</span> c_inspecao <span class="sc">+</span> xi_11 <span class="sc">+</span> theta_11</span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a>  </span>
+<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a>  <span class="co"># Cálculo para o estado (2,0)</span></span>
+<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a>  xi_20 <span class="ot">&lt;-</span> c_nc <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_menos) <span class="sc">*</span> (m <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a>  theta_20 <span class="ot">&lt;-</span> (c_desc_c <span class="sc">*</span> (p_menos <span class="sc">*</span> alfa) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> p_AF)) <span class="sc">+</span> </span>
+<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a>              (c_desc_nc <span class="sc">*</span> ((<span class="dv">1</span> <span class="sc">-</span> p_menos) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> beta)) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">-</span> p_AF))</span>
+<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a>  phi_20 <span class="ot">&lt;-</span> c_inspecao <span class="sc">+</span> xi_20 <span class="sc">+</span> theta_20 <span class="sc">+</span> c_ajuste</span>
+<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a>  </span>
+<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a>  <span class="co"># Cálculo para o estado (2,1)</span></span>
+<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a>  xi_21 <span class="ot">&lt;-</span> c_nc <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> p_menos) <span class="sc">*</span> (m <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a>  theta_21 <span class="ot">&lt;-</span> (c_desc_c <span class="sc">*</span> (p_menos <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> alfa)) <span class="sc">/</span> p_AF) <span class="sc">+</span> </span>
+<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a>              (c_desc_nc <span class="sc">*</span> ((<span class="dv">1</span> <span class="sc">-</span> p_menos) <span class="sc">*</span> beta) <span class="sc">/</span> p_AF)</span>
+<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a>  phi_21 <span class="ot">&lt;-</span> c_inspecao <span class="sc">+</span> xi_21 <span class="sc">+</span> theta_21</span>
+<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a>  </span>
+<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a>  <span class="co"># Retorna os custos de todos os estados</span></span>
+<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">list</span>(</span>
+<span id="cb8-59"><a href="#cb8-59" tabindex="-1"></a>    <span class="at">phi_00 =</span> phi_00, <span class="at">phi_01 =</span> phi_01,</span>
+<span id="cb8-60"><a href="#cb8-60" tabindex="-1"></a>    <span class="at">phi_10 =</span> phi_10, <span class="at">phi_11 =</span> phi_11,</span>
+<span id="cb8-61"><a href="#cb8-61" tabindex="-1"></a>    <span class="at">phi_20 =</span> phi_20, <span class="at">phi_21 =</span> phi_21</span>
+<span id="cb8-62"><a href="#cb8-62" tabindex="-1"></a>  ))</span>
+<span id="cb8-63"><a href="#cb8-63" tabindex="-1"></a>}</span></code></pre></div>
+<p><br></p>
+</div>
+</div>
+<div id="aplicação-numérica-e-análise-de-sensibilidade" class="section level4 tabset tabset-pills">
+<h4 class="tabset tabset-pills"><strong>Aplicação Numérica e Análise de
+Sensibilidade</strong></h4>
+<p>Geralmente, o procedimento discutido aqui pode melhorar processos de
+alta qualidade que empregam algum tipo de controle automático através da
+coleta de observações individuais.</p>
+<p>Com isso, consideramos o seguinte exemplo:</p>
+<p>A fabricação de circuitos integrados de alto volume apresenta
+dificuldades com o processo de solda, tais como “insuficiência ou
+excesso de solda”, “projeção de solda” ou posicionamento incorreto de
+dispositivo ou filete”. Dados históricos permitem adotar, em um processo
+de solda, <span class="math inline">\(p_{(+)} = 0,999\)</span> como a
+probabilidade de conformidade do processo sob controle, podendo-se usar
+uma distribuição geométrica com parâmetro <span class="math inline">\(\pi = 0,0001\)</span> para descrever a mudança de
+estado do processo, operando fora de controle, com fração de
+conformidade <span class="math inline">\(p_{(-)} = 0,95\)</span>. O
+sistema automático de inspeção por raio X instalado na linha de produção
+é imperfeito, assumindo-se os erros de inspeção <span class="math inline">\(\alpha = \beta = 0,01\)</span>. Os componentes de
+custo são estimados em <span class="math inline">\(c_{inspeção} = \$ \;
+0,25\)</span>, <span class="math inline">\(c_{a} = \$ \; 100\)</span>,
+<span class="math inline">\(c_{nc} = \$ \; 20\)</span>, <span class="math inline">\(c_{descarte(c)} = \$ \; 2\)</span>, <span class="math inline">\(c_{descarte(nc)} = \$ \; 2\)</span>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="do">## Parâmetros probabilísticos do processo:</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fl">0.999</span>         <span class="do">## Fracao de conformes em processo sob controle</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fl">0.95</span>        <span class="do">## Fracao de conformes em processo fora de controle</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>pe <span class="ot">&lt;-</span> <span class="fl">0.0001</span>        <span class="do">## Probabilidade de ocorrencia shift do processo</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>alfa <span class="ot">&lt;-</span> <span class="fl">0.01</span>        <span class="do">## Probabilidade de classificar item conforme como nao conforme</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fl">0.01</span>        <span class="do">## Probabilidade de classificar item nao conforme como conforme</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="do">## Componentes de custo:</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>c.inspecao <span class="ot">&lt;-</span> <span class="fl">0.25</span>  <span class="do">## Custo de inspecao</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>c.ajuste <span class="ot">&lt;-</span> <span class="dv">100</span>         <span class="do">## Custo de ajuste</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>c.nc <span class="ot">&lt;-</span> <span class="dv">20</span>            <span class="do">## Custo de enviar items nao-conformes</span></span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>c.descarte.c <span class="ot">&lt;-</span> <span class="dv">2</span>   <span class="do">## Custo de item conforme inspecionado/descartado</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>c.descarte.nc <span class="ot">&lt;-</span> <span class="dv">2</span>  <span class="do">## Custo de item nao-conforme inspecionado/descartado]</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>L.teste <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>m.teste <span class="ot">&lt;-</span> <span class="dv">25</span></span></code></pre></div>
+<p>O objetivo é encontrar os valores de m e L:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>val.p.AS <span class="ot">&lt;-</span> <span class="fu">calcular.p.AS</span>(p1, alfa, beta)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>val.p.AF <span class="ot">&lt;-</span> <span class="fu">calcular.p.AF</span>(p2, alfa, beta)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;P.AS:&quot;</span>, val.p.AS, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>    <span class="st">&quot;P.AF:&quot;</span>, val.p.AF, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## P.AS: 0.98902 
+##  P.AF: 0.941</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>val.p.AS.L <span class="ot">&lt;-</span> <span class="fu">calc.prob.sob.controle.L</span>(pe, L.teste)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>val.p.AF.L <span class="ot">&lt;-</span> <span class="fu">calc.prob.fora.controle.L</span>(pe, L.teste)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>val.p.AS.m <span class="ot">&lt;-</span> <span class="fu">calc.prob.sob.controle.m</span>(pe, m.teste)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>val.p.AF.m <span class="ot">&lt;-</span> <span class="fu">calc.prob.fora.controle.m</span>(pe, m.teste)</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;P.AS.L:&quot;</span>, val.p.AS.L, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>    <span class="st">&quot;P.AF.L:&quot;</span>, val.p.AF.L, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>    <span class="st">&quot;P.AS.m:&quot;</span>, val.p.AS.m, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>    <span class="st">&quot;P.AF.m:&quot;</span>, val.p.AF.m, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
+<pre><code>## P.AS.L: 0.9900493 
+##  P.AF.L: 0.009950661 
+##  P.AS.m: 0.997503 
+##  P.AF.m: 0.002497002</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>matriz.P <span class="ot">&lt;-</span> <span class="fu">calc.matriz.prob.markov</span>(val.p.AS, val.p.AF, val.p.AS.L, val.p.AF.L, val.p.AS.m, val.p.AF.m)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>matriz.P</span></code></pre></div>
+<pre><code>##            (0,0)     (0,1)        (1,0)       (1,1) (2,0) (2,1)
+## (0,0) 0.01087074 0.9791786 0.0005870890 0.009363572 0.000 0.000
+## (0,1) 0.01095258 0.9865504 0.0001473231 0.002349679 0.000 0.000
+## (1,0) 0.00000000 0.0000000 0.0000000000 0.000000000 0.059 0.941
+## (1,1) 0.00000000 0.0000000 0.0000000000 0.000000000 0.059 0.941
+## (2,0) 0.01087074 0.9791786 0.0005870890 0.009363572 0.000 0.000
+## (2,1) 0.01087074 0.9791786 0.0005870890 0.009363572 0.000 0.000</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>PI <span class="ot">&lt;-</span> <span class="fu">calcular_pi</span>(matriz.P)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>p.L <span class="ot">&lt;-</span> <span class="fu">calcular_p_L</span>(matriz.P, PI)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>PI</span></code></pre></div>
+<pre><code>##         (0,0)         (0,1)         (1,0)         (1,1)         (2,0) 
+##  1.666667e-01  1.666667e-01  1.666667e-01  1.666667e-01  1.666667e-01 
+##         (2,1)               
+##  1.666667e-01 -9.187067e-16</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>p.L</span></code></pre></div>
+<pre><code>##           [,1]
+## [1,] 0.9906364
+## [2,] 0.9976503
+## [3,] 0.0000000
+## [4,] 0.0000000
+## [5,] 0.0000000
+## [6,] 0.0000000</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># Chamada da função com os parâmetros fornecidos</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>resultados <span class="ot">&lt;-</span> <span class="fu">calcular.custos</span>(</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="at">p_mais =</span> p1, <span class="at">p_menos =</span> p2, <span class="at">alfa =</span> alfa, <span class="at">beta =</span> beta,</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="at">c_inspecao =</span> c.inspecao, <span class="at">c_ajuste =</span> c.ajuste, </span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  <span class="at">c_desc_c =</span> c.descarte.c, <span class="at">c_desc_nc =</span> c.descarte.nc, </span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>  <span class="at">c_nc =</span> c.nc, <span class="at">p_AS =</span> val.p.AS, <span class="at">p_AF =</span> val.p.AF, <span class="at">p_L =</span> p.L,</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>  <span class="at">pi =</span> pe, <span class="at">L =</span> L.teste, <span class="at">m =</span> m.teste</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>)</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co"># Exibindo os resultados</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="fu">print</span>(resultados)</span></code></pre></div>
+<pre><code>## $phi_00
+## [1] 104.6631
+## 
+## $phi_01
+## [1] NA
+## 
+## $phi_10
+## [1] NA
+## 
+## $phi_11
+## [1] NA
+## 
+## $phi_20
+## [1] 126.25
+## 
+## $phi_21
+## [1] 26.25</code></pre>
+<p><br></p>
 </div>
 </div>
 

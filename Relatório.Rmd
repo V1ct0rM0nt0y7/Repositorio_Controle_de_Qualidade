@@ -137,7 +137,7 @@ Se o processo estiver ```Sob Controle```, as probabilidades de ```Não Ajustar``
 
 $$
 \begin{align*}
-p_{(A)} 
+p_{(AS)} 
 = P \{Y = 1 \mid Z = 1 \} 
 &= \sum_{i=0}^{1} P \{ Y = 1 , X = i \mid Z = 1 \} \\
 &= \sum_{i=0}^{1} P \{ X = i \mid Z = 1 \} P \{ Y = 1 \mid X = i, Z = 1 \} \\
@@ -147,7 +147,7 @@ p_{(A)}
 \underset{(1 - \alpha)}{\underbrace{P\{Y = 1 \mid X = 1, Z = 1\}}} \right] \\
 &= \left[ (1 - p_{(+)}) \beta \right] + \left[ p_{(+)} (1 - \alpha) \right] 
 \\\\
-(1 - p_{(A)})
+(1 - p_{(AS)})
 = P \{Y = 0 \mid Z = 1 \}
 &= 1 - \left[ ((1 - p_{(+)}) \beta ) + (p_{(+)} (1 - \alpha)) \right] \\
 &= \left[ ((1 - p_{(+)}) (1 - \beta) ) + (p_{(+)} \alpha) \right]
@@ -158,7 +158,7 @@ Se o processo estiver ```Fora de Controle```, as probabilidades de ```Não Ajust
 
 $$
 \begin{align*}
-p_{(D)} 
+p_{(AF)} 
 = P \{Y = 1 \mid Z = 0 \} 
 &= \sum_{i=0}^{1} P \{ Y = 1 , X = i \mid Z = 0 \} \\
 &= \sum_{i=0}^{1} P \{ X = i \mid Z = 0 \} P \{ Y = 1 \mid X = i, Z = 0 \} \\
@@ -168,7 +168,7 @@ p_{(D)}
 \underset{(1 - \alpha)}{\underbrace{P\{Y = 1 \mid X = 1, Z = 0\}}} \right] \\\\
 &= \left[ (1 - p_{(-)}) \beta \right] + \left[ p_{(-)} (1 - \alpha) \right] 
 \\\\
-(1 - p_{(D)})
+(1 - p_{(AF)})
 =P \{Y = 0 \mid Z = 0 \} 
 &= 1 - \left[ ((1 - p_{(-)}) \beta ) + (p_{(-)} (1 - \alpha)) \right] \\
 &= \left[ ((1 - p_{(-)}) (1 - \beta) ) + (p_{(-)} \alpha) \right]
@@ -177,8 +177,8 @@ $$
 
 Resumindo:
 
-+ $p_{(A)} = P \{ Y = 1 \mid Z = 1 \} = \left[ (1 - p_{(+)}) \beta \right] + \left[ p_{(+)} (1 - \alpha) \right]$
-+ $p_{(D)} = P \{ Y = 1 \mid Z = 0 \} = \left[ (1 - p_{(-)}) \beta \right] + \left[ p_{(-)} (1 - \alpha) \right]$
++ $p_{(AS)} = P \{ Y = 1 \mid Z = 1 \} = \left[ (1 - p_{(+)}) \beta \right] + \left[ p_{(+)} (1 - \alpha) \right]$
++ $p_{(AF)} = P \{ Y = 1 \mid Z = 0 \} = \left[ (1 - p_{(-)}) \beta \right] + \left[ p_{(-)} (1 - \alpha) \right]$
 
 <br>
 
@@ -218,52 +218,1113 @@ Com isso, as probabilidades de transição podem ser calculadas da seguinte form
 
 Quando o ciclo anterior é ajustado (1º, 3º e 5º linhas), ou seja, (w,0), p/ w =  0, 1, 2:
 
-  + $P_{(w,0)(0,0)} = (1 - \pi)^{L}(1 - p_{(A)})$
-  + $P_{(w,0)(0,1)} = (1 - \pi)^{L}p_{(A)}$
-  + $P_{(w,0)(1,0)} = \left[ 1 - (1 - \pi)^{L} \right] (1 - p_{(D)})$
-  + $P_{(w,0)(1,1)} = \left[ 1 - (1 - \pi)^{L} \right] p_{(D)}$
+  + $P_{(w,0)(0,0)} = (1 - \pi)^{L}(1 - p_{(AS)})$
+    + A probabilidade de **não ocorrer** uma mudança na fração de **L** itens conformes $(1 - \pi)^{L}$ no ciclo seguinte, com a probabilidade $(1 - P_{(AS)})$ de **ajustar** quando o processo está ```Sob-Controle```;
+  + $P_{(w,0)(0,1)} = (1 - \pi)^{L}p_{(AS)}$
+    + A probabilidade de **não ocorrer** uma mudança na fração de **L** itens conformes $(1 - \pi)^{L}$ no ciclo seguinte, com a probabilidade $P_{(AS)}$ de **não ajustar** quando o processo está ```Sob-Controle```;
+  + $P_{(w,0)(1,0)} = \left[ 1 - (1 - \pi)^{L} \right] (1 - p_{(AF)})$
+    + A probabilidade de **ocorrer** uma mudança na fração de **L** itens conformes $\left[ 1 - (1 - \pi)^{L} \right]$ no ciclo seguinte, com a probabilidade $(1 - P_{(AF)})$ de **ajustar** quando o processo está ```Fora de Controle```;
+  + $P_{(w,0)(1,1)} = \left[ 1 - (1 - \pi)^{L} \right] p_{(AF)}$
+    + A probabilidade de **ocorrer** uma mudança na fração de **L** itens conformes $\left[ 1 - (1 - \pi)^{L} \right]$ no ciclo seguinte, com a probabilidade $P_{(AF)}$ de **não ajustar** quando o processo está ```Fora de Controle```;
   + $P_{(w,0)(2,0)} = 0$
-    + O ciclo seguinte começa ```Sob-Controle```.
+    + O ciclo seguinte começa ```Sob-Controle```;
   + $P_{(w,0)(2,1)} = 0$
     + O ciclo seguinte começa ```Sob-Controle```.
   
 Quando o ciclo anterior não é ajustado e o processo está ```Sob-Controle``` (2º linha), ou seja, (0,1):
 
-  + $P_{(0,1)(0,0)} = (1 - \pi)^{m}(1 - p_{(A)})$
-  + $P_{(0,1)(0,1)} = (1 - \pi)^{m}p_{(A)}$
-  + $P_{(0,1)(1,0)} = \left[ 1 - (1 - \pi)^{m} \right] (1 - p_{(D)})$
-  + $P_{(0,1)(1,1)} = \left[ 1 - (1 - \pi)^{m} \right] p_{(D)}$
+  + $P_{(0,1)(0,0)} = (1 - \pi)^{m}(1 - p_{(AS)})$
+    + A probabilidade de **não ocorrer** uma mudança na fração de **m** itens conformes $(1 - \pi)^{m}$ no ciclo seguinte, com a probabilidade $(1 - P_{(AS)})$ de **ajustar** quando o processo está ```Sob-Controle```;
+  + $P_{(0,1)(0,1)} = (1 - \pi)^{m}p_{(AS)}$
+    + A probabilidade de **não ocorrer** uma mudança na fração de **m** itens conformes $(1 - \pi)^{m}$ no ciclo seguinte, com a probabilidade $P_{(AS)}$ de **não ajustar** quando o processo está ```Sob-Controle```;
+  + $P_{(0,1)(1,0)} = \left[ 1 - (1 - \pi)^{m} \right] (1 - p_{(AF)})$
+    + A probabilidade de **ocorrer** uma mudança na fração de **m** itens conformes $\left[ 1 - (1 - \pi)^{m} \right]$ no ciclo seguinte, com a probabilidade $(1 - P_{(AF)})$ de **ajustar** quando o processo está ```Fora de Controle```;
+  + $P_{(0,1)(1,1)} = \left[ 1 - (1 - \pi)^{m} \right] p_{(AF)}$
+    + A probabilidade de **ocorrer** uma mudança na fração de **m** itens conformes $\left[ 1 - (1 - \pi)^{m} \right]$ no ciclo seguinte, com a probabilidade $P_{(AF)}$ de **não ajustar** quando o processo está ```Fora de Controle```;
   + $P_{(0,1)(2,0)} = 0$
-    + O ciclo seguinte começa ```Sob-Controle```.
+    + O ciclo seguinte começa ```Sob-Controle```;
   + $P_{(0,1)(2,1)} = 0$
     + O ciclo seguinte começa ```Sob-Controle```.
 
 Quando o ciclo anterior não é ajustado (4 e 6º linhas), ou seja, (w,1), p/ w = 1, 2:
 
   + $P_{(w,1)(0,0)} = 0$
-    + O ciclo anterior começa ```Fora de Controle```
+    + O ciclo anterior começa ```Fora de Controle```;
   + $P_{(w,1)(0,1)} = 0$
-    + O ciclo anterior começa ```Fora de Controle```
+    + O ciclo anterior começa ```Fora de Controle```;
   + $P_{(w,1)(1,0)} = 0$
-    + O ciclo anterior começa ```Fora de Controle```
+    + O ciclo anterior começa ```Fora de Controle```;
   + $P_{(w,1)(1,1)} = 0$
-    + O ciclo anterior começa ```Fora de Controle```
-  + $P_{(w,1)(2,0)} = 1 - p_{(D)}$
-  + $P_{(w,1)(2,1)} = p_{(D)}$
+    + O ciclo anterior começa ```Fora de Controle```;
+  + $P_{(w,1)(2,0)} = 1 - p_{(AF)}$
+    + A probabilidade $(1 - P_{(AF)})$ de **ajustar** quando o processo está ```Fora de Controle```;
+  + $P_{(w,1)(2,1)} = p_{(AF)}$
+    + A probabilidade $P_{(AF)}$ de **não ajustar** quando o processo está ```Fora de Controle```.
   
 Fazendo as substituições, obtemos:
 
 $$
 \begin{bmatrix}
-(1-p_{(A)})(1-\pi)^L & p_{(A)}(1-\pi)^L & (1-p_{(D)})[1 - (1-\pi)^L] & p_{(D)}[1 - (1-\pi)^L] & 0 & 0 \\
-(1-p_{(A)})(1-\pi)^m & p_{(A)}(1-\pi)^m & (1-p_{(D)})[1 - (1-\pi)^m] & p_{(D)}[1 - (1-\pi)^m] & 0 & 0  \\
-(1-p_{(A)})(1-\pi)^L & p_{(A)}(1-\pi)^L & (1-p_{(D)})[1 - (1-\pi)^L] & p_{(D)}[1 - (1-\pi)^L] & 0 & 0 \\
-0 & 0 & 0 & 0 & 1-p_{(D)} & p_{(D)} \\
-(1-p_{(A)})(1-\pi)^L & p_{(A)}(1-\pi)^L & (1-p_{(D)})[1 - (1-\pi)^L] & p_{(D)}[1 - (1-\pi)^L] & 0 & 0 \\
-0 & 0 & 0 & 0 & 1-p_{(D)} & p_{(D)} \\
+(1-p_{(AS)})(1-\pi)^L & p_{(AS)}(1-\pi)^L & (1-p_{(AF)})[1 - (1-\pi)^L] & p_{(AF)}[1 - (1-\pi)^L] & 0 & 0 \\
+(1-p_{(AS)})(1-\pi)^m & p_{(AS)}(1-\pi)^m & (1-p_{(AF)})[1 - (1-\pi)^m] & p_{(AF)}[1 - (1-\pi)^m] & 0 & 0  \\
+(1-p_{(AS)})(1-\pi)^L & p_{(AS)}(1-\pi)^L & (1-p_{(AF)})[1 - (1-\pi)^L] & p_{(AF)}[1 - (1-\pi)^L] & 0 & 0 \\
+0 & 0 & 0 & 0 & 1-p_{(AF)} & p_{(AF)} \\
+(1-p_{(AS)})(1-\pi)^L & p_{(AS)}(1-\pi)^L & (1-p_{(AF)})[1 - (1-\pi)^L] & p_{(AF)}[1 - (1-\pi)^L] & 0 & 0 \\
+0 & 0 & 0 & 0 & 1-p_{(AF)} & p_{(AF)} \\
 \end{bmatrix}
 $$
 
+<br>
 
+#### **Distribuição Estacionária da Cadeia**
 
+A matriz de transição P é irredutível e aperiódica, podendo-se obter sua distribuição invariante, denotada pelo vetor:
 
+$$
+\pi = 
+\left[ 
+\pi(w,s); \; w = 0,1,2; \; s = 0,1
+\right]', 
+\; com
+\sum_{(w,s) \in E}^{}
+\pi(w,s) = 1
+$$
+
+A probabilidade $\pi(w,s)$ pode ser vista como a proporção de tempo que o sistema de produção visita o estado (w,s), após um número suficientemente grande de inspeções.
+
+O vetor $\pi$ é a solução do sistema de equações lineares $\pi' = \pi'P$, que pode ser reescrita como:
+
+$$
+\pi'(P - I) = 0'
+\; ou
+(P' - I)\pi = 0
+$$
+
+em que I é a matriz identidade, 0 o vetor nulo e P' é a transposta de P.
+
+Portanto, o vetor $\pi$ pode ser obtido a partir da resolução desse sistema linear com a restrição acima. Pela dimensão do sistema, a solução pode ser rapidamente obtida utilizando-se de técnica numérica disponível
+
+Além disso, é necessária a determinação da proporção de ciclos de comprimento L ou m, de cada estado da cadeia de Markov, para um número suficiente grande de inspeções. Sejam $p_{L}(w,s)$ a probabilidade de o intervalo de amostragem ter comprimento L, dado que o estado seja $(w,s)$ e $p_{m}(w,s)$, se o ciclo de monitoramento tiver comprimento m, com $p_{m}(w,s) = 1 - p_{l}(w,s)$
+
+O comprimento do intervalo de amostragem é L apenas quando se decide intervir no processo no ciclo imediatamente anterior. Essa situação corresponde às linhas da Matriz P, com s = 0. Por exemplo, $p_{L}(0,0)$ denota a probabilidade do ciclo corrente ter comprimento L, dado que seu estado é (0,0). É necessário que o último item inspecionado tenha sido declarado não-conforme, ou seja, (0,0), (1,0), (2,0) são os possíveis estados do ciclo de monitoramento imediatamente anterior. Especificamente:
+
+$$
+p_{L}(0,0)
+=
+\sum_{k = 0}^{2}
+P{(W_{i - 1}, S_{i - 1})}
+=
+(k,0)
+|
+(W_{i}, S_{i})
+= 
+(0,0)
+$$
+
+Em que $(W_{i}, S_{i})$ é a variável aleatória associada ao estado da cadeia de Markov da i-ésima inspeção.
+
+Aplicando o teorema de Bayes no segundo termo, obtém-se:
+
+$$
+\frac
+{
+\sum_{k = 0}^{2}
+P
+\left[
+(W_{i}, S_{i})
+=
+(0,0)
+|
+(W_{i - 1}, S_{i - 1})
+= 
+(k,0)
+\right]
+P
+\left[
+(W_{i - 1}, S_{i - 1})
+=
+(0,0)
+\right]
+}
+{
+P
+\left[
+(W_{i}, S_{i})
+=
+(0,0)
+\right]
+}
+$$
+
+Onde $P{(W_{i}, S_{i}) = (0,0) | (W_{i - 1}, S_{i - 1})} = (k,0)$ é a probabilidade de transição $P_{(k,0)(0,0)}, k = 0, 1, 2$, pelas propriedades da distribuição estacionária, temos:
+
+$$
+P(W_{i - 1}, S_{i - 1}) = (k,0) 
+= 
+P(W_{i}, S_{i}) = (k,0)
+= 
+\pi(k,0)
+$$
+
+Dessa maneira, podemos achar todos os valores de $p_{L}(w,s)$:
+
+$$
+p_{L}(0,0) 
+= 
+\frac 
+{ 
+\left[ 
+\pi(0,0) 
++ 
+\pi(1,0) 
++ 
+\pi(2,0)
+\right] 
++ 
+P_{(0,0)(0,0)} 
+} 
+{ 
+\pi(0,0) 
+} 
+$$
+
+$$
+p_{L}(0,0) 
+= 
+\frac 
+{ 
+\left[ 
+\pi(0,0) 
++ 
+\pi(1,0) 
++ 
+\pi(2,0)
+\right] 
++ 
+P_{(0,0)(0,1)} 
+} 
+{ 
+\pi(0,1) 
+} 
+$$
+
+$$
+p_{L}(0,0) 
+= 
+\frac 
+{ 
+\left[ 
+\pi(0,0) 
++ 
+\pi(1,0) 
++ 
+\pi(2,0)
+\right] 
++ 
+P_{(0,0)(1,0)} 
+} 
+{ 
+\pi(1,0) 
+} 
+$$
+
+$$
+p_{L}(0,0) 
+= 
+\frac 
+{ 
+\left[ 
+\pi(0,0) 
++ 
+\pi(1,0) 
++ 
+\pi(2,0)
+\right] 
++ 
+P_{(0,0)(1,1)} 
+} 
+{ 
+\pi(1,1) 
+} 
+$$
+
+$$
+p_{L}(2,0) 
+= 
+0
+$$
+
+$$
+p_{L}(2,1) 
+= 
+0
+$$
+
+<br>
+
+#### **Custo dos Estados** {.tabset .tabset-pills}
+
+A estrutura de custo considerada é similar áquela adotada por e em trabalhos anteriores. Consideram três componentes de custo:
+
++ Custo de inspeção
++ Custo de Ajuste
++ Custo de envio de item não-conforme ao mercado. Adotamos a seguinte notação:
+
++ $c_{ìnspeção}$ $\rightarrow$ É o custo de classificação de um item inspecionado e está presente em todos os estados da cadeia;
++ $c_{ajuste}$ $\rightarrow$ É o custo de ajustar o processo.
++ $c_{descarte(c)}$ $\rightarrow$ Custo de descartar item conforme;
++ $c_{descarte(nc)}$ $\rightarrow$ Custo de descartar item não conforme;
++ $c_{(nc)}$ $\rightarrow$ É o custo de itme defeituoso que segue para o consumidor final ou para as próximas etapas do processo;
+
+Os componentes $c_{s.nc}$ $c_{s.c}$ são usados nas situações em que os itens descartados são submetidos a processos de reaproveitamento com custos diferenciados entre itens conformes e não-conformes. No caso de os itens inspecionados serem simplesmente descartados, deve-se utiilizar o custo unitário de produção, desconsiderado o sistema de controle.
+
+A expressão geral do custo esperado de cada estado (w,s), w = 0, 1, 2 e s = 0, 1 é dada por:
+
++ $\phi (w,s) = c_{insp} + \varepsilon (w,s) + \theta (w,s) + \varphi (w,s)$
+
+em que:
+
++ $\varepsilon (w,s)$ $\rightarrow$ É o custo esperado por ciclo referente aos itens não-conformes dentre os m - 1 ou L - 1 itens não inspecoinados que são enviados aao mercado ou às próximas etapas da produção;
++ $\theta (w,s)$ $\rightarrow$ É o custo esperado por ciclo relacionado ao item inspecionado, descartado;
++ $\varphi (w,s)$ $\rightarrow$ É o custo de ajuste do processo de produção por ciclo. Para $\forall$
+
+<br>
+
+##### **Custo dos estados (0,0) e (0,1)**
+
+O item é inspecionado é classificado como conforme, mas, devido aos erros de classificação, ele pode ser realmente conforme ou não-conforme. A probabilidade do item inspecionado, declarado conforme, ser realmente conforme é:
+
+$$
+P \{ X = 1 \mid Y = 1, Z = 1 \} 
+= 
+\frac 
+{ 
+P \{ X = 1, Y = 1 \mid Z = 1 \} 
+} 
+{ 
+P \{ Y = 1 \mid Z = 1 \} 
+} 
+= 
+\frac 
+{ 
+p_{(+)} 
+(1 - \alpha) 
+} 
+{ 
+p_{(AS)} 
+} 
+$$
+
+E de ser realmente não-conforme é:
+
+$$
+P \{ X = 0 \mid Y = 1, Z = 1 \} 
+= 
+\frac 
+{ 
+P \{ X = 0, Y = 1 \mid Z = 1 \} 
+} 
+{ 
+P \{ Y = 1 \mid Z = 1 \} 
+} 
+= 
+\frac 
+{ 
+(1 - p_{(+)}) 
+\beta 
+} 
+{ 
+p_{(AS)} 
+} 
+$$
+
+Para o estado $(0, 0)$:
+
+$$
+\xi (0,0) 
+= 
+c_{(nc)} 
+\left[ 
+p_{m}(0,0) 
+(m - 1) 
+(1 - p_{(+)}) 
++ 
+p_{L}(0,0) 
+(L - 1) 
+(1 - p_{(+)}) 
+\right] 
+$$
+
+$$
+\theta(0, 0) 
+= 
+c_{descarte(c)} 
+\frac 
+{ 
+p_{(+)} \alpha 
+} 
+{1 - p_{(AS)} 
+} 
++ 
+c_{descarte(nc)} 
+\frac 
+{ 
+(1 - p_{(+)}) 
+(1 - \beta) 
+} 
+{ 
+1 - p_{(AS)} 
+} 
+$$
+
+$$
+\phi(0, 0) 
+= 
+c_{ìnspeção} 
++ 
+\xi(0, 0) 
++ 
+\theta(0, 0) 
++ 
+c_{ajuste} 
+$$
+
+Para o estado $(0, 1)$:
+
+$$
+\xi (0,1) 
+= 
+c_{(nc)} 
+\left[ 
+p_{m}(0,1) 
+(m - 1) 
+(1 - p_{(+)}) 
++ 
+p_{L}(0,1) 
+(L - 1) 
+(1 - p_{(+)}) 
+\right] 
+$$
+
+$$
+\theta(0, 1) 
+= 
+c_{descarte(c)} 
+\frac 
+{ 
+p_{(+)} (1 - \alpha) 
+} 
+{ 
+p_{(AS)} 
+} 
++ 
+c_{descarte(nc)} 
+\frac 
+{ 
+(1 - p_{(+)}) 
+(1 - \beta) 
+} 
+{ 
+p_{(AS)} 
+} 
+$$
+
+$$
+\phi(0, 1) 
+= 
+c_{ìnspeção} 
++ 
+\xi(0, 1) 
++ 
+\theta(0, 1) 
+$$
+
+<br>
+
+##### **Custo dos estados (1,0) e (1,1)**
+
+Quando a fração de conformidade se modifica durante o ciclo corrente, pelo menos um item inspecionado é produzido com o processo fora de controle. O ponto de mudança pode ocorrer em qualquer instante entre o primeiro e o último item produzido durante o ciclo. Em ciclos com intervalo entre amostragens de comprimento $m$, a probabilidade de a mudança de estado ocorrer no instante $t$ é dada por:
+
+$$
+q_{m}(t) = 
+\frac 
+{ 
+(1 - \pi)^{t - 1} 
+\pi 
+} 
+{ 
+1 - (1 - \pi)^L 
+} 
+, \quad t = 1, \dots, L 
+$$
+
+Analogamente, quando o intervalo entre inspeções tem comprimento \(L\), essa probabilidade é:
+
+$$
+q_{L}(t) = 
+\frac 
+{ 
+(1 - \pi)^{t - 1} 
+\pi 
+} 
+{ 
+1 - (1 - \pi)^m 
+} 
+, \quad t = 1, \dots, m 
+$$
+
+Para o estado $(1, 0)$:
+
+$$
+\xi(1, 0) 
+= 
+c_{(nc)} 
+\Bigg[ 
+p_{m}(1, 0) 
+\sum_{t = 1}^{m} 
+q_{m}(t) 
+\big[ 
+(t - 1) 
+(1 - p_{(+)}) 
++ 
+(m - t) 
+(1 - p_{(-)}) 
+\big] 
++ 
+p_L(1, 0) 
+\sum_{t=1}^{L} 
+q_{L}(t) 
+\big[ 
+(t - 1) 
+(1 - p_{(+)}) 
++ 
+(L - t) 
+(1 - p_{(-)}) 
+\big] 
+\Bigg] 
+$$
+
+$$
+\theta(1, 0) 
+= 
+c_{descarte(c)} 
+\frac 
+{ 
+p_{(-)} 
+\alpha 
+} 
+{ 
+1 - p_{(AF)} 
+} 
++ 
+c_{descarte(nc)} 
+\frac 
+{ 
+(1 - p_{(-)}) 
+(1 - \beta) 
+} 
+{ 
+1 - p_{(AF)} 
+} 
+$$
+
+$$
+\phi(1, 0) 
+= 
+c_{ìnspeção} 
++ 
+\xi(1, 0) 
++ 
+\theta(1, 0) 
++ 
+c_{ajuste} 
+$$
+
+Para o estado $(1, 1)$:
+
+$$
+\xi(1, 1) 
+= 
+c_{(nc)} 
+\Bigg[ 
+p_{m}(1, 1) 
+\sum_{t = 1}^{m} 
+q_{m}(t) 
+\big[ 
+(t - 1) 
+(1 - p_{(+)}) 
++ 
+(m - t) 
+(1 - p_{(-)}) 
+\big] 
++ 
+p_L(1, 1) 
+\sum_{t=1}^{L} 
+q_{L}(t) 
+\big[ 
+(t - 1) 
+(1 - p_{(+)}) 
++ 
+(L - t) 
+(1 - p_{(-)}) 
+\big] 
+\Bigg] 
+$$
+
+$$
+\theta(1, 1) 
+= 
+c_{descarte(c)} 
+\frac 
+{ 
+p_{(-)} 
+(1 - \alpha) 
+} 
+{ 
+p_{(AF)} 
+} 
++ 
+c_{descarte(nc)} 
+\frac 
+{ 
+(1 - p_{(-)}) 
+\beta 
+} 
+{ 
+p_{(AF)} 
+} 
+$$
+
+$$
+\phi(1, 1) 
+= 
+c_{ìnspeção} 
++ 
+\xi(1, 1) 
++ 
+\theta(1, 1) 
+$$
+
+<br>
+
+##### Custo dos Estados **(2, 0) e (2, 1)**
+
+Para o estado $(2, 0)$:
+
+$$
+\xi(2, 0) 
+= 
+c_{(nc)} 
+(1 - p_{(-)}) 
+(m - 1) 
+$$
+
+$$
+\theta(2, 0) 
+= 
+c_{descarte(c)} 
+\frac 
+{ 
+p_{(-)} 
+\alpha 
+} 
+{ 
+1 - p_{(AF)} 
+} 
++ 
+c_{descarte(nc)} 
+\frac 
+{ (1 - p_{(-)}) 
+(1 - \beta) 
+} 
+{ 
+1 - p_{(AF)} 
+} 
+$$
+
+$$
+\phi(2, 0) 
+= 
+c_{ìnspeção} 
++ 
+\xi(2, 0) 
++ 
+\theta(2, 0) 
++ 
+c_{ajuste} 
+$$
+
+Para o estado $(2, 1)$:
+
+$$
+\xi(2, 0) 
+= 
+c_{(nc)} 
+(1 - p_{(-)}) 
+(m - 1) 
+$$
+
+$$
+\theta(2, 0) 
+= 
+c_{descarte(c)} 
+\frac 
+{ 
+p_{(-)} 
+(1 - \alpha) 
+} 
+{ 
+p_{(AF)} 
+} 
++ 
+c_{descarte(nc)} 
+\frac 
+{ (1 - p_{(-)}) 
+\beta 
+} 
+{ 
+p_{(AF)} 
+} 
+$$
+
+$$
+\phi(2, 1) 
+= 
+c_{ìnspeção} 
++ 
+\xi(2, 1) 
++ 
+\theta(2, 1) 
+$$
+
+<br>
+
+#### **Funções Utilizadas** {.tabset .tabset-pills}
+
+##### **Funções Amostrais**
+
+```{r funcoes1, echo = T, include = T, warning = F}
+## Função 1: Função para calcular a média de um vetor numérico
+calcular.media <- function(vetor) {
+  soma <- sum(vetor) ## Soma todos os elementos do vetor
+  n <- length(vetor) ## Obtém o número de elementos no vetor
+  media <- soma / n ## Calcula a média dividindo a soma pelo número de elementos
+  return(media) ## Retorna o valor da média
+}
+
+## Função 2: Função para calcular a variância de um vetor numérico
+calcular.variancia <- function(vetor) {
+  media <- calcula_media(vetor) ## Calcula a média utilizando a função anterior
+  desvios <- vetor - media ## Calcula os desvios de cada elemento em relação à média
+  quadrados <- desvios^2 ## Eleva os desvios ao quadrado
+  variancia <- sum(quadrados) / (length(vetor) - 1) ## Calcula a variância dividindo a soma dos quadrados pelo número de elementos menos 1
+  return(variancia) ## Retorna o valor da variância
+}
+
+## Função 3: Função para calcular a mediana de um vetor numérico
+calcular.mediana <- function(vetor) {
+  vetor <- sort(vetor) ## Ordena o vetor em ordem crescente
+  n <- length(vetor) ## Obtém o número de elementos no vetor
+  if (n %% 2 == 0) { ## Verifica se o número de elementos é par
+    mediana <- (vetor[n/2] + vetor[n/2 + 1]) / 2 ## Calcula a mediana como a média dos dois valores centrais
+  } else { ## Caso o número de elementos seja ímpar
+    mediana <- vetor[(n + 1) / 2] ## Seleciona o elemento central como a mediana
+  }
+  return(mediana) ## Retorna o valor da mediana
+}
+```
+
+<br>
+
+##### **Funções de Operações Matriciais**
+
+```{r funcoes2, echo = T, include = T, warning = F}
+## Função 4: Função para gerar uma matriz identidade de tamanho n
+gerar.matriz.identidade <- function(n) {
+  identidade <- diag(1, n) ## Utiliza a função diag para criar uma matriz identidade de tamanho n
+  return(identidade) ## Retorna a matriz identidade gerada
+}
+
+## Função 5: Função para transpor uma matriz
+transpor.matriz <- function(matriz) {
+  transposta <- t(matriz) ## Transpõe a matriz utilizando a função t
+  return(transposta) ## Retorna a matriz transposta
+}
+
+## Função 6: Função para multiplicar duas matrizes
+multiplicar.matriz <- function(matriz1, matriz2) {
+  if (ncol(matriz1) != nrow(matriz2)) { ## Verifica se o número de colunas da primeira matriz é igual ao número de linhas da segunda
+    stop("Dimensões incompatíveis para multiplicação.") ## Retorna um erro caso as dimensões sejam incompatíveis
+  }
+  produto <- matriz1 %*% matriz2 ## Realiza a multiplicação matricial utilizando o operador %*%
+  return(produto) ## Retorna o resultado da multiplicação
+}
+```
+
+<br>
+
+##### **Funções da Distribuição Geométrica**
+
+```{r funcoes3, echo = T, include = T, warning = F}
+## Função 7: Calcula a probabilidade de X = k para uma distribuição geométrica
+fdp.geometrica <- function(k, p) {
+  if (k < 1) { ## Verifica se k é menor que 1 (valores inválidos para a distribuição geométrica)
+    stop("k deve ser um número inteiro maior ou igual a 1.") ## Retorna um erro se k for inválido
+  }
+  fdp <- (1 - p)^(k - 1) * p ## Fórmula da probabilidade da distribuição geométrica
+  return(fdp) ## Retorna a probabilidade calculada
+}
+
+## Função 8: Calcula a função de distribuição acumulada (CDF) para X <= k
+fda.geometrica <- function(k, p) {
+  if (k < 1) { ## Verifica se k é menor que 1 (valores inválidos para a CDF da distribuição geométrica)
+    stop("k deve ser um número inteiro maior ou igual a 1.") ## Retorna um erro se k for inválido
+  }
+  fda <- 1 - (1 - p)^k ## Fórmula da CDF da distribuição geométrica
+  return(fda) ## Retorna o valor da CDF
+}
+
+## Função 9: Gera n valores aleatórios seguindo a distribuição geométrica
+gerador.geometrica <- function(n, p) {
+  if (n <= 0) { ## Verifica se n é menor ou igual a zero
+    stop("n deve ser maior que zero.") ## Retorna um erro se n for inválido
+  }
+  valores <- numeric(n) ## Cria um vetor vazio para armazenar os valores gerados
+  for (i in 1:n) { ## Inicia um loop para gerar n valores
+    u <- runif(1) ## Gera um número aleatório uniforme entre 0 e 1
+    valores[i] <- ceiling(log(1 - u) / log(1 - p)) ## Aplica a fórmula inversa da CDF para gerar o valor geométrico
+  }
+  return(valores) ## Retorna os valores gerados
+}
+
+## Função 10: Calcula a média teórica da distribuição geométrica
+media.geometrica <- function(p) {
+  media <- 1 / p ## Fórmula para a média teórica da distribuição geométrica
+  return(media) ## Retorna a média calculada
+}
+
+## Função 11: Calcula a variância teórica da distribuição geométrica
+variancia.geometrica <- function(p) {
+  variancia <- (1 - p) / (p^2) ## Fórmula para a variância teórica da distribuição geométrica
+  return(variancia) ## Retorna a variância calculada
+}
+```
+
+<br>
+
+##### **Funções do Modelo Probabilístico**
+
+```{r funcoes4, echo = T, include = T, warning = F}
+## Função 12: Calcula p_(AS) - Probabilidade de Não Ajustar o processo Sob Controle
+calcular.p.AS <- function(p1, alfa, beta) {
+  ## p1: probabilidade de conformidade do item sob controle (p_(+))
+  ## alfa: probabilidade de classificar item conforme como não conforme
+  ## beta: probabilidade de classificar item não conforme como conforme
+
+  termo.1 <- (1 - p1) * beta ## Probabilidade de itens não conformes classificados como conformes
+  termo.2 <- p1 * (1 - alfa) ## Probabilidade de itens conformes classificados como conformes
+  p.AS <- termo.1 + termo.2 ## Soma os termos para calcular p_(AS)
+  return(p.AS) ## Retorna p_(AS)
+}
+
+## Função 13: Calcula p_(AF) - Probabilidade de Não Ajustar o processo Fora de Controle
+calcular.p.AF <- function(p2, alfa, beta) {
+  ## p2: probabilidade de conformidade do item fora de controle (p_(-))
+  ## alfa: probabilidade de classificar item conforme como não conforme
+  ## beta: probabilidade de classificar item não conforme como conforme
+
+  termo.1 <- (1 - p2) * beta ## Probabilidade de itens não conformes classificados como conformes
+  termo.2 <- p2 * (1 - alfa) ## Probabilidade de itens conformes classificados como conformes
+  p.AF <- termo.1 + termo.2 ## Soma os termos para calcular p_(AF)
+  return(p.AF) ## Retorna p_(AF)
+}
+```
+
+<br>
+
+##### **Funções da Cadeia de Markov**
+
+```{r funcoes5, echo = T, include = T, warning = F}
+## Função 14: Calcula a probabilidade do processo continuar "Sob Controle" por L ciclos, dado que começa "Sob Controle"
+calc.prob.sob.controle.L <- function(pi, L) {
+  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
+  ## L: número de ciclos correntes
+
+  prob.sob.controle.L <- (1 - pi)^L ## Calcula a probabilidade de o processo continuar "Sob Controle" por L ciclos
+  return(prob.sob.controle.L) ## Retorna a probabilidade calculada
+}
+
+## Função 15: Calcula a probabilidade do processo continuar "Sob Controle" por m ciclos, dado que começa "Sob Controle"
+calc.prob.sob.controle.m <- function(pi, m) {
+  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
+  ## m: número de ciclos correntes
+
+  prob.sob.controle.m <- (1 - pi)^m ## Calcula a probabilidade de o processo continuar "Sob Controle" por m ciclos
+  return(prob.sob.controle.m) ## Retorna a probabilidade calculada
+}
+
+## Função 16: Calcula a probabilidade de o processo passar para "Fora de Controle" após L ciclos, dado que começa "Sob Controle"
+calc.prob.fora.controle.L <- function(pi, L) {
+  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
+  ## L: número de ciclos correntes
+
+  prob.fora.controle.L <- 1 - (1 - pi)^L ## Calcula a probabilidade de o processo passar para "Fora de Controle" após L ciclos
+  return(prob.fora.controle.L) ## Retorna a probabilidade calculada
+}
+
+## Função 17: Calcula a probabilidade de o processo passar para "Fora de Controle" após m ciclos, dado que começa "Sob Controle"
+calc.prob.fora.controle.m <- function(pi, m) {
+  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
+  ## m: número de ciclos correntes
+
+  prob.fora.controle.m <- 1 - (1 - pi)^m ## Calcula a probabilidade de o processo passar para "Fora de Controle" após m ciclos
+  return(prob.fora.controle.m) ## Retorna a probabilidade calculada
+}
+
+calc.matriz.prob.markov <- function(p.AS, p.AF, p.AS.L, p.AF.L, p.AS.m, p.AF.m) {
+  
+  ## Probabilidades de transição para os diferentes estados:
+  P.00.00 <- (1 - p.AS) * p.AS.L
+  P.00.01 <- p.AS * p.AS.L
+  P.00.10 <- (1 - p.AF) * p.AF.L
+  P.00.11 <- p.AF * p.AF.L
+  P.00.20 <- 0
+  P.00.21 <- 0
+
+  P.01.00 <- (1 - p.AS) * p.AS.m
+  P.01.01 <- p.AS * p.AS.m
+  P.01.10 <- (1 - p.AF) * p.AF.m
+  P.01.11 <- p.AF * p.AF.m
+  P.01.20 <- 0
+  P.01.21 <- 0
+
+  P.10.00 <- 0
+  P.10.01 <- 0
+  P.10.10 <- 0
+  P.10.11 <- 0
+  P.10.20 <- 1 - p.AF
+  P.10.21 <- p.AF
+
+  P.11.00 <- 0
+  P.11.01 <- 0
+  P.11.10 <- 0
+  P.11.11 <- 0
+  P.11.20 <- 1 - p.AF
+  P.11.21 <- p.AF
+
+  P.20.00 <- (1 - p.AS) * p.AS.L
+  P.20.01 <- p.AS * p.AS.L
+  P.20.10 <- (1 - p.AF) * p.AF.L
+  P.20.11 <- p.AF * p.AF.L
+  P.20.20 <- 0
+  P.20.21 <- 0
+
+  P.21.00 <- (1 - p.AS) * p.AS.L
+  P.21.01 <- p.AS * p.AS.L
+  P.21.10 <- (1 - p.AF) * p.AF.L
+  P.21.11 <- p.AF * p.AF.L
+  P.21.20 <- 0
+  P.21.21 <- 0
+
+  ## Matriz de transição com as probabilidades:
+  matriz <- matrix(c(
+    P.00.00, P.00.01, P.00.10, P.00.11, P.00.20, P.00.21,
+    P.01.00, P.01.01, P.01.10, P.01.11, P.01.20, P.01.21,
+    P.10.00, P.10.01, P.10.10, P.10.11, P.10.20, P.10.21,
+    P.11.00, P.11.01, P.11.10, P.11.11, P.11.20, P.11.21,
+    P.20.00, P.20.01, P.20.10, P.20.11, P.20.20, P.20.21,
+    P.21.00, P.21.01, P.21.10, P.21.11, P.21.20, P.21.21), nrow = 6, byrow = TRUE)
+
+  ## Nomes das linhas e colunas:
+  rownames(matriz) <- c("(0,0)", "(0,1)", "(1,0)", "(1,1)", "(2,0)", "(2,1)")
+  colnames(matriz) <- c("(0,0)", "(0,1)", "(1,0)", "(1,1)", "(2,0)", "(2,1)")
+
+  return(matriz)
+}
+```
+
+<br>
+
+##### **Funções da Distribuição Estacionária**
+
+```{r funcoes6, echo = T, include = T, warning = F}
+calcular_pi <- function(P) {
+  n <- nrow(P)  ## Número de estados
+  I <- diag(n) ## Cria a matriz Identidade.
+  
+  P_minus_I <- P - I ## Substrae a matriz identidade de P
+  
+  # Adicionar a restrição de normalização (soma das probabilidades deve ser 1)
+  # Para isso, adicionamos uma linha de 1's e uma coluna de 1's no sistema
+  P_augmented <- rbind(P_minus_I, rep(1, n))
+  
+  # Agora, adicionamos a restrição de normalização, que é uma linha de 1's
+  P_augmented <- cbind(P_augmented, c(rep(0, n - 1), 1))
+  
+  # Vetor de constantes (todas as constantes são 0, exceto a última que é 1)
+  b <- c(rep(0, n), 1)
+  
+  # Resolver o sistema linear (P_augmented) %*% pi = b
+  pi <- solve(P_augmented, b)
+  
+  return(pi)
+}
+
+calcular_p_L <- function(P, pi) {
+  n <- nrow(P)
+  p_L <- matrix(0, nrow = n, ncol = 1)
+  
+  for (i in 1:n) {
+    if (i <= 3) {
+      soma_pi <- sum(pi[1:3])
+      p_L[i] <- sum(P[i, 1:3] * pi[1:3]) / pi[i]
+    } else {
+      p_L[i] <- 0
+    }
+  }
+  
+  return(p_L)
+}
+```
+
+<br>
+
+##### **Custos dos Estados**
+
+```{r funcoes7, echo = T, include = T, warning = F}
+calcular.custos <- function(p_mais, p_menos, alfa, beta, c_inspecao, c_ajuste, 
+                             c_desc_c, c_desc_nc, c_nc, p_AS, p_AF, p_L, pi, L, m) {
+
+  # Função auxiliar para calcular q.m(t) ou q.L(t)
+  calcular.q <- function(t, pi, comprimento) {
+    numerador <- (1 - pi)^(t - 1) * pi
+    denominador <- 1 - (1 - pi)^comprimento
+    return(numerador / denominador)
+  }
+  
+  # Cálculo para o estado (0,0)
+  xi_00 <- c_nc * ((p_AF[1] * (m - 1) * (1 - p_mais)) + (p_L[1] * (L - 1) * (1 - p_mais)))
+  theta_00 <- (c_desc_c * (p_mais * alfa) / (1 - p_AS)) + 
+              (c_desc_nc * ((1 - p_mais) * (1 - beta)) / (1 - p_AS))
+  phi_00 <- c_inspecao + xi_00 + theta_00 + c_ajuste
+  
+  # Cálculo para o estado (0,1)
+  xi_01 <- c_nc * ((p_AF[2] * (m - 1) * (1 - p_mais)) + (p_L[2] * (L - 1) * (1 - p_mais)))
+  theta_01 <- (c_desc_c * (p_mais * (1 - alfa)) / p_AS) + 
+              (c_desc_nc * ((1 - p_mais) * (1 - beta)) / p_AS)
+  phi_01 <- c_inspecao + xi_01 + theta_01
+  
+  # Cálculo para o estado (1,0)
+  xi_10 <- c_nc * (
+    p_AF[3] * sum(sapply(1:m, function(t) calcular.q(t, pi, m) * 
+                             ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos)))) +
+    p_L[3] * sum(sapply(1:L, function(t) calcular.q(t, pi, L) * 
+                             ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))))
+  )
+  theta_10 <- (c_desc_c * (p_menos * alfa) / (1 - p_AF)) + 
+              (c_desc_nc * ((1 - p_menos) * (1 - beta)) / (1 - p_AF))
+  phi_10 <- c_inspecao + xi_10 + theta_10 + c_ajuste
+  
+  # Cálculo para o estado (1,1)
+  xi_11 <- c_nc * (
+    p_AF[4] * sum(sapply(1:m, function(t) calcular.q(t, pi, m) * 
+                             ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos)))) +
+    p_L[4] * sum(sapply(1:L, function(t) calcular.q(t, pi, L) * 
+                             ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))))
+  )
+  theta_11 <- (c_desc_c * (p_menos * (1 - alfa)) / p_AF) + 
+              (c_desc_nc * ((1 - p_menos) * beta) / p_AF)
+  phi_11 <- c_inspecao + xi_11 + theta_11
+  
+  # Cálculo para o estado (2,0)
+  xi_20 <- c_nc * (1 - p_menos) * (m - 1)
+  theta_20 <- (c_desc_c * (p_menos * alfa) / (1 - p_AF)) + 
+              (c_desc_nc * ((1 - p_menos) * (1 - beta)) / (1 - p_AF))
+  phi_20 <- c_inspecao + xi_20 + theta_20 + c_ajuste
+  
+  # Cálculo para o estado (2,1)
+  xi_21 <- c_nc * (1 - p_menos) * (m - 1)
+  theta_21 <- (c_desc_c * (p_menos * (1 - alfa)) / p_AF) + 
+              (c_desc_nc * ((1 - p_menos) * beta) / p_AF)
+  phi_21 <- c_inspecao + xi_21 + theta_21
+  
+  # Retorna os custos de todos os estados
+  return(list(
+    phi_00 = phi_00, phi_01 = phi_01,
+    phi_10 = phi_10, phi_11 = phi_11,
+    phi_20 = phi_20, phi_21 = phi_21
+  ))
+}
+```
+
+<br>
+
+#### **Aplicação Numérica e Análise de Sensibilidade** {.tabset .tabset-pills}
+
+Geralmente, o procedimento discutido aqui pode melhorar processos de alta qualidade que empregam algum tipo de controle automático através da coleta de observações individuais.
+
+Com isso, consideramos o seguinte exemplo:
+
+A fabricação de circuitos integrados de alto volume apresenta dificuldades com o processo de solda, tais como "insuficiência ou excesso de solda", "projeção de solda" ou posicionamento incorreto de dispositivo ou filete". Dados históricos permitem adotar, em um processo de solda, $p_{(+)} = 0,999$ como a probabilidade de conformidade do processo sob controle, podendo-se usar uma distribuição geométrica com parâmetro $\pi = 0,0001$ para descrever a mudança de estado do processo, operando fora de controle, com fração de conformidade $p_{(-)} = 0,95$. O sistema automático de inspeção por raio X instalado na linha de produção é imperfeito, assumindo-se os erros de inspeção $\alpha = \beta = 0,01$. Os componentes de custo são estimados em $c_{inspeção} = \$ \; 0,25$, $c_{a} = \$ \; 100$, $c_{nc} = \$ \; 20$, $c_{descarte(c)} = \$ \; 2$, $c_{descarte(nc)} = \$ \; 2$.
+
+```{r parametros, echo = T, include = T, warning = F}
+## Parâmetros probabilísticos do processo:
+p1 <- 0.999 		## Fracao de conformes em processo sob controle
+p2 <- 0.95 		  ## Fracao de conformes em processo fora de controle
+pe <- 0.0001 		## Probabilidade de ocorrencia shift do processo
+alfa <- 0.01 		## Probabilidade de classificar item conforme como nao conforme
+beta <- 0.01 		## Probabilidade de classificar item nao conforme como conforme
+
+## Componentes de custo:
+c.inspecao <- 0.25 	## Custo de inspecao
+c.ajuste <- 100 		## Custo de ajuste
+c.nc <- 20 		      ## Custo de enviar items nao-conformes
+c.descarte.c <- 2 	## Custo de item conforme inspecionado/descartado
+c.descarte.nc <- 2 	## Custo de item nao-conforme inspecionado/descartado]
+
+L.teste <- 100
+m.teste <- 25
+```
+
+O objetivo é encontrar os valores de m e L:
+
+```{r aplicacao, echo = T, include = T, warning = F}
+val.p.AS <- calcular.p.AS(p1, alfa, beta)
+val.p.AF <- calcular.p.AF(p2, alfa, beta)
+
+cat("P.AS:", val.p.AS, "\n",
+    "P.AF:", val.p.AF, "\n")
+
+val.p.AS.L <- calc.prob.sob.controle.L(pe, L.teste)
+val.p.AF.L <- calc.prob.fora.controle.L(pe, L.teste)
+val.p.AS.m <- calc.prob.sob.controle.m(pe, m.teste)
+val.p.AF.m <- calc.prob.fora.controle.m(pe, m.teste)
+
+cat("P.AS.L:", val.p.AS.L, "\n",
+    "P.AF.L:", val.p.AF.L, "\n",
+    "P.AS.m:", val.p.AS.m, "\n",
+    "P.AF.m:", val.p.AF.m, "\n")
+
+matriz.P <- calc.matriz.prob.markov(val.p.AS, val.p.AF, val.p.AS.L, val.p.AF.L, val.p.AS.m, val.p.AF.m)
+matriz.P
+
+PI <- calcular_pi(matriz.P)
+p.L <- calcular_p_L(matriz.P, PI)
+
+PI
+p.L
+
+# Chamada da função com os parâmetros fornecidos
+resultados <- calcular.custos(
+  p_mais = p1, p_menos = p2, alfa = alfa, beta = beta,
+  c_inspecao = c.inspecao, c_ajuste = c.ajuste, 
+  c_desc_c = c.descarte.c, c_desc_nc = c.descarte.nc, 
+  c_nc = c.nc, p_AS = val.p.AS, p_AF = val.p.AF, p_L = p.L,
+  pi = pe, L = L.teste, m = m.teste
+)
+
+# Exibindo os resultados
+print(resultados)
+```
+
+<br>
