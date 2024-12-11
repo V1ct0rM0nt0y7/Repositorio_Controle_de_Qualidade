@@ -51,7 +51,7 @@ Neste trabalho, utilizaremos a **distribuição geométrica**, com parâmetro $\
 
 ### **Controle On-Line de Processo por atributo c/ Intervalo de Amostragem Variável** {.tabset .tabset-pills}
 
-#### **Hipóteses**
+#### **Hipóteses** {.tabset .tabset-pills}
 
 **1) Modelo do Processo:**
 O Processo de Produção segue uma distribuição geométrica com parâmetro $\pi \in [0, 1]$:
@@ -98,7 +98,91 @@ Para o monitorar o processo, inspeciona-se um único item de acordo com os segui
 
 <br>
 
-#### **Modelo Probabilístico**
+##### **Funções da Distribuição Geométrica**
+
+```{r funcoes1, echo = T, include = T, warning = F}
+## Função 1: Calcula a probabilidade de X = k para uma distribuição geométrica
+fdp.geometrica <- function(k, p) {
+  if (k < 1) { ## Verifica se k é menor que 1 (valores inválidos para a distribuição geométrica)
+    stop("k deve ser um número inteiro maior ou igual a 1.") ## Retorna um erro se k for inválido
+  }
+  fdp <- (1 - p)^(k - 1) * p ## Fórmula da probabilidade da distribuição geométrica
+  return(fdp) ## Retorna a probabilidade calculada
+}
+
+## Função 2: Calcula a função de distribuição acumulada (CDF) para X <= k
+fda.geometrica <- function(k, p) {
+  if (k < 1) { ## Verifica se k é menor que 1 (valores inválidos para a CDF da distribuição geométrica)
+    stop("k deve ser um número inteiro maior ou igual a 1.") ## Retorna um erro se k for inválido
+  }
+  fda <- 1 - (1 - p)^k ## Fórmula da CDF da distribuição geométrica
+  return(fda) ## Retorna o valor da CDF
+}
+
+## Função 3: Gera n valores aleatórios seguindo a distribuição geométrica
+gerador.geometrica <- function(n, p) {
+  if (n <= 0) { ## Verifica se n é menor ou igual a zero
+    stop("n deve ser maior que zero.") ## Retorna um erro se n for inválido
+  }
+  valores <- numeric(n) ## Cria um vetor vazio para armazenar os valores gerados
+  for (i in 1:n) { ## Inicia um loop para gerar n valores
+    u <- runif(1) ## Gera um número aleatório uniforme entre 0 e 1
+    valores[i] <- ceiling(log(1 - u) / log(1 - p)) ## Aplica a fórmula inversa da CDF para gerar o valor geométrico
+  }
+  return(valores) ## Retorna os valores gerados
+}
+
+## Função 4: Calcula a média teórica da distribuição geométrica
+media.geometrica <- function(p) {
+  media <- 1 / p ## Fórmula para a média teórica da distribuição geométrica
+  return(media) ## Retorna a média calculada
+}
+
+## Função 5: Calcula a variância teórica da distribuição geométrica
+variancia.geometrica <- function(p) {
+  variancia <- (1 - p) / (p^2) ## Fórmula para a variância teórica da distribuição geométrica
+  return(variancia) ## Retorna a variância calculada
+}
+```
+
+<br>
+
+##### **Funções Amostrais**
+
+```{r funcoes2, echo = T, include = T, warning = F}
+## Função 6: Função para calcular a média de um vetor numérico
+calcular.media <- function(vetor) {
+  soma <- sum(vetor) ## Soma todos os elementos do vetor
+  n <- length(vetor) ## Obtém o número de elementos no vetor
+  media <- soma / n ## Calcula a média dividindo a soma pelo número de elementos
+  return(media) ## Retorna o valor da média
+}
+
+## Função 7: Função para calcular a variância de um vetor numérico
+calcular.variancia <- function(vetor) {
+  media <- calcula_media(vetor) ## Calcula a média utilizando a função anterior
+  desvios <- vetor - media ## Calcula os desvios de cada elemento em relação à média
+  quadrados <- desvios^2 ## Eleva os desvios ao quadrado
+  variancia <- sum(quadrados) / (length(vetor) - 1) ## Calcula a variância dividindo a soma dos quadrados pelo número de elementos menos 1
+  return(variancia) ## Retorna o valor da variância
+}
+
+## Função 8: Função para calcular a mediana de um vetor numérico
+calcular.mediana <- function(vetor) {
+  vetor <- sort(vetor) ## Ordena o vetor em ordem crescente
+  n <- length(vetor) ## Obtém o número de elementos no vetor
+  if (n %% 2 == 0) { ## Verifica se o número de elementos é par
+    mediana <- (vetor[n/2] + vetor[n/2 + 1]) / 2 ## Calcula a mediana como a média dos dois valores centrais
+  } else { ## Caso o número de elementos seja ímpar
+    mediana <- vetor[(n + 1) / 2] ## Seleciona o elemento central como a mediana
+  }
+  return(mediana) ## Retorna o valor da mediana
+}
+```
+
+<br>
+
+#### **Modelo Probabilístico** {.tabset .tabset-pills}
 
 Há 3 Variáveis Aleatórias associadas ao item inspecionado:
 
@@ -182,7 +266,39 @@ Resumindo:
 
 <br>
 
-#### **Cadeia de Markov**
+##### **Funções do Modelo Probabilístico**
+
+```{r funcoes3, echo = T, include = T, warning = F}
+## Função 9: Calcula p_(AS) - Probabilidade de Não Ajustar o processo Sob Controle
+calcular.p.AS <- function(p1, alfa, beta) {
+  
+  ## p1: probabilidade de conformidade do item sob controle (p_(+))
+  ## alfa: probabilidade de classificar item conforme como não conforme
+  ## beta: probabilidade de classificar item não conforme como conforme
+
+  termo.1 <- (1 - p1) * beta ## Probabilidade de itens não conformes classificados como conformes
+  termo.2 <- p1 * (1 - alfa) ## Probabilidade de itens conformes classificados como conformes
+  p.AS <- termo.1 + termo.2 ## Soma os termos para calcular p_(AS)
+  return(p.AS) ## Retorna p_(AS)
+}
+
+## Função 10: Calcula p_(AF) - Probabilidade de Não Ajustar o processo Fora de Controle
+calcular.p.AF <- function(p2, alfa, beta) {
+  
+  ## p2: probabilidade de conformidade do item fora de controle (p_(-))
+  ## alfa: probabilidade de classificar item conforme como não conforme
+  ## beta: probabilidade de classificar item não conforme como conforme
+
+  termo.1 <- (1 - p2) * beta ## Probabilidade de itens não conformes classificados como conformes
+  termo.2 <- p2 * (1 - alfa) ## Probabilidade de itens conformes classificados como conformes
+  p.AF <- termo.1 + termo.2 ## Soma os termos para calcular p_(AF)
+  return(p.AF) ## Retorna p_(AF)
+}
+```
+
+<br>
+
+#### **Cadeia de Markov** {.tabset .tabset-pills}
 
 O processo de produção, o monitoramento e a regra de decisão sobre o ajuste em cada ciclo de inspeção podem ser modelados como uma cadeia de Markov em tempo discreto, em que cada passado da cadeia representa um ciclo. Os estados da cadeia descrevem as várias combinações da situação do processo ao final de um ciclo e da consequente decisão.
 
@@ -276,7 +392,114 @@ $$
 
 <br>
 
-#### **Distribuição Estacionária da Cadeia**
+##### **Funções da Cadeia de Markov**
+
+```{r funcoes4, echo = T, include = T, warning = F}
+## Função 11: Calcula a probabilidade do processo continuar "Sob Controle" por L ciclos, dado que começa "Sob Controle"
+calc.prob.sob.controle.L <- function(pi, L) {
+  
+  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
+  ## L: número de ciclos correntes
+
+  prob.sob.controle.L <- (1 - pi)^L ## Calcula a probabilidade de o processo continuar "Sob Controle" por L ciclos
+  return(prob.sob.controle.L) ## Retorna a probabilidade calculada
+}
+
+## Função 12: Calcula a probabilidade do processo continuar "Sob Controle" por m ciclos, dado que começa "Sob Controle"
+calc.prob.sob.controle.m <- function(pi, m) {
+  
+  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
+  ## m: número de ciclos correntes
+
+  prob.sob.controle.m <- (1 - pi)^m ## Calcula a probabilidade de o processo continuar "Sob Controle" por m ciclos
+  return(prob.sob.controle.m) ## Retorna a probabilidade calculada
+}
+
+## Função 13: Calcula a probabilidade de o processo passar para "Fora de Controle" após L ciclos, dado que começa "Sob Controle"
+calc.prob.fora.controle.L <- function(pi, L) {
+  
+  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
+  ## L: número de ciclos correntes
+
+  prob.fora.controle.L <- 1 - (1 - pi)^L ## Calcula a probabilidade de o processo passar para "Fora de Controle" após L ciclos
+  return(prob.fora.controle.L) ## Retorna a probabilidade calculada
+}
+
+## Função 14: Calcula a probabilidade de o processo passar para "Fora de Controle" após m ciclos, dado que começa "Sob Controle"
+calc.prob.fora.controle.m <- function(pi, m) {
+  
+  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
+  ## m: número de ciclos correntes
+
+  prob.fora.controle.m <- 1 - (1 - pi)^m ## Calcula a probabilidade de o processo passar para "Fora de Controle" após m ciclos
+  return(prob.fora.controle.m) ## Retorna a probabilidade calculada
+}
+
+calc.matriz.prob.markov <- function(p.AS, p.AF, p.AS.L, p.AF.L, p.AS.m, p.AF.m) {
+  
+  ## Probabilidades de transição para os diferentes estados:
+  P.00.00 <- (1 - p.AS) * p.AS.L
+  P.00.01 <- p.AS * p.AS.L
+  P.00.10 <- (1 - p.AF) * p.AF.L
+  P.00.11 <- p.AF * p.AF.L
+  P.00.20 <- 0
+  P.00.21 <- 0
+
+  P.01.00 <- (1 - p.AS) * p.AS.m
+  P.01.01 <- p.AS * p.AS.m
+  P.01.10 <- (1 - p.AF) * p.AF.m
+  P.01.11 <- p.AF * p.AF.m
+  P.01.20 <- 0
+  P.01.21 <- 0
+
+  P.10.00 <- 0
+  P.10.01 <- 0
+  P.10.10 <- 0
+  P.10.11 <- 0
+  P.10.20 <- 1 - p.AF
+  P.10.21 <- p.AF
+
+  P.11.00 <- 0
+  P.11.01 <- 0
+  P.11.10 <- 0
+  P.11.11 <- 0
+  P.11.20 <- 1 - p.AF
+  P.11.21 <- p.AF
+
+  P.20.00 <- (1 - p.AS) * p.AS.L
+  P.20.01 <- p.AS * p.AS.L
+  P.20.10 <- (1 - p.AF) * p.AF.L
+  P.20.11 <- p.AF * p.AF.L
+  P.20.20 <- 0
+  P.20.21 <- 0
+
+  P.21.00 <- (1 - p.AS) * p.AS.L
+  P.21.01 <- p.AS * p.AS.L
+  P.21.10 <- (1 - p.AF) * p.AF.L
+  P.21.11 <- p.AF * p.AF.L
+  P.21.20 <- 0
+  P.21.21 <- 0
+
+  ## Matriz de transição com as probabilidades:
+  matriz <- matrix(c(
+    P.00.00, P.00.01, P.00.10, P.00.11, P.00.20, P.00.21,
+    P.01.00, P.01.01, P.01.10, P.01.11, P.01.20, P.01.21,
+    P.10.00, P.10.01, P.10.10, P.10.11, P.10.20, P.10.21,
+    P.11.00, P.11.01, P.11.10, P.11.11, P.11.20, P.11.21,
+    P.20.00, P.20.01, P.20.10, P.20.11, P.20.20, P.20.21,
+    P.21.00, P.21.01, P.21.10, P.21.11, P.21.20, P.21.21), nrow = 6, byrow = TRUE)
+
+  ## Nomes das linhas e colunas:
+  rownames(matriz) <- c("(0,0)", "(0,1)", "(1,0)", "(1,1)", "(2,0)", "(2,1)")
+  colnames(matriz) <- c("(0,0)", "(0,1)", "(1,0)", "(1,1)", "(2,0)", "(2,1)")
+
+  return(matriz)
+}
+```
+
+<br>
+
+#### **Distribuição Estacionária da Cadeia** {.tabset .tabset-pills}
 
 A matriz de transição P é irredutível e aperiódica, podendo-se obter sua distribuição invariante, denotada pelo vetor:
 
@@ -460,6 +683,57 @@ p_{L}(2,1)
 0
 $$
 
+##### **Funções da Distribuição Estacionária**
+
+```{r funcoes5, echo = T, include = T, warning = F}
+## Função 15: Calcula a distribuição estacionária para uma cadeia de Markov
+calcular.distribuicao.estacionaria <- function(P) {
+  
+  ## P: Matriz de transição de probabilidade (matriz quadrada de dimensões n x n)
+  
+  if (!is.matrix(P) || nrow(P) != ncol(P)) {
+    stop("A matriz P deve ser quadrada.") ## Verifica se P é uma matriz quadrada
+  }
+  
+  n <- nrow(P) ## Número de estados
+  
+  # Configurando o sistema linear (P' - I)π = 0 com a restrição de normalização π1 + π2 + ... + πn = 1
+  A <- t(P) - diag(1, n) ## Transposta de P subtraída pela identidade
+  A <- rbind(A, rep(1, n)) ## Adiciona a equação de normalização
+  b <- c(rep(0, n), 1) ## Vetor de constantes (0s e 1 para a normalização)
+  
+  pi <- qr.solve(A, b) ## Resolve o sistema utilizando decomposição QR
+  
+  names(pi) <- paste0("pi.", 1:n) ## Nomeia os estados de forma similar à sua convenção
+  return(pi)
+}
+
+## Função 16: Calcula a probabilidade de transição \( P_L(w,s) \) para cada estado (w,s)
+calcular.pL <- function(P, pi) {
+  
+  ## P: Matriz de transição de probabilidade (matriz quadrada de dimensões n x n)
+  ## pi: vetor contendo as probabilidades da distribuição estacionária (pi_1, pi_2, ..., pi_n)
+  
+  n <- nrow(P)  # Número de estados na matriz P
+  pL <- rep(0, n)  # Inicializa o vetor de resultados com zeros
+  
+  # Soma dos valores de pi para os estados (0,0), (1,0), (2,0)
+  soma_pi_0 <- pi[1] + pi[3] + pi[5]  # Soma das probabilidades dos estados (w,s)
+  
+  # Calculando as probabilidades de transição p_L(w,s) para cada estado (w,s)
+  pL[1] <- (soma_pi_0 + P[1,1] + P[2,1] + P[3,1]) / (pi[1] * 100) # P_L(0,0)
+  pL[2] <- (soma_pi_0 + P[1,2] + P[2,2] + P[3,2]) / (pi[2] * 100) # P_L(0,1)
+  pL[3] <- (soma_pi_0 + P[1,3] + P[2,3] + P[3,3]) / (pi[3] * 100) # P_L(1,0)
+  pL[4] <- (soma_pi_0 + P[1,4] + P[2,4] + P[3,4]) / (pi[4] * 100) # P_L(1,1)
+  
+  # Os estados 2,0 e 2,1 possuem probabilidade zero
+  pL[5] <- 0  # P_L(2,0)
+  pL[6] <- 0  # P_L(2,1)
+  
+  return(pL)
+}
+```
+
 <br>
 
 #### **Custo dos Estados** {.tabset .tabset-pills}
@@ -538,6 +812,8 @@ p_{(AS)}
 } 
 $$
 
+<br>
+
 Para o estado $(0, 0)$:
 
 $$
@@ -588,6 +864,8 @@ c_{ìnspeção}
 + 
 c_{ajuste} 
 $$
+
+<br>
 
 Para o estado $(0, 1)$:
 
@@ -673,6 +951,8 @@ q_{L}(t) =
 , \quad t = 1, \dots, m 
 $$
 
+<br>
+
 Para o estado $(1, 0)$:
 
 $$
@@ -739,6 +1019,8 @@ c_{ìnspeção}
 + 
 c_{ajuste} 
 $$
+
+<br>
 
 Para o estado $(1, 1)$:
 
@@ -807,7 +1089,7 @@ $$
 
 <br>
 
-##### Custo dos Estados **(2, 0) e (2, 1)**
+##### **Custo dos Estados (2, 0) e (2, 1)**
 
 Para o estado $(2, 0)$:
 
@@ -854,6 +1136,8 @@ c_{ìnspeção}
 c_{ajuste} 
 $$
 
+<br>
+
 Para o estado $(2, 1)$:
 
 $$
@@ -899,363 +1183,178 @@ $$
 
 <br>
 
-#### **Funções Utilizadas** {.tabset .tabset-pills}
-
-##### **Funções Amostrais**
-
-```{r funcoes1, echo = T, include = T, warning = F}
-## Função 1: Função para calcular a média de um vetor numérico
-calcular.media <- function(vetor) {
-  soma <- sum(vetor) ## Soma todos os elementos do vetor
-  n <- length(vetor) ## Obtém o número de elementos no vetor
-  media <- soma / n ## Calcula a média dividindo a soma pelo número de elementos
-  return(media) ## Retorna o valor da média
-}
-
-## Função 2: Função para calcular a variância de um vetor numérico
-calcular.variancia <- function(vetor) {
-  media <- calcula_media(vetor) ## Calcula a média utilizando a função anterior
-  desvios <- vetor - media ## Calcula os desvios de cada elemento em relação à média
-  quadrados <- desvios^2 ## Eleva os desvios ao quadrado
-  variancia <- sum(quadrados) / (length(vetor) - 1) ## Calcula a variância dividindo a soma dos quadrados pelo número de elementos menos 1
-  return(variancia) ## Retorna o valor da variância
-}
-
-## Função 3: Função para calcular a mediana de um vetor numérico
-calcular.mediana <- function(vetor) {
-  vetor <- sort(vetor) ## Ordena o vetor em ordem crescente
-  n <- length(vetor) ## Obtém o número de elementos no vetor
-  if (n %% 2 == 0) { ## Verifica se o número de elementos é par
-    mediana <- (vetor[n/2] + vetor[n/2 + 1]) / 2 ## Calcula a mediana como a média dos dois valores centrais
-  } else { ## Caso o número de elementos seja ímpar
-    mediana <- vetor[(n + 1) / 2] ## Seleciona o elemento central como a mediana
-  }
-  return(mediana) ## Retorna o valor da mediana
-}
-```
-
-<br>
-
-##### **Funções de Operações Matriciais**
-
-```{r funcoes2, echo = T, include = T, warning = F}
-## Função 4: Função para gerar uma matriz identidade de tamanho n
-gerar.matriz.identidade <- function(n) {
-  identidade <- diag(1, n) ## Utiliza a função diag para criar uma matriz identidade de tamanho n
-  return(identidade) ## Retorna a matriz identidade gerada
-}
-
-## Função 5: Função para transpor uma matriz
-transpor.matriz <- function(matriz) {
-  transposta <- t(matriz) ## Transpõe a matriz utilizando a função t
-  return(transposta) ## Retorna a matriz transposta
-}
-
-## Função 6: Função para multiplicar duas matrizes
-multiplicar.matriz <- function(matriz1, matriz2) {
-  if (ncol(matriz1) != nrow(matriz2)) { ## Verifica se o número de colunas da primeira matriz é igual ao número de linhas da segunda
-    stop("Dimensões incompatíveis para multiplicação.") ## Retorna um erro caso as dimensões sejam incompatíveis
-  }
-  produto <- matriz1 %*% matriz2 ## Realiza a multiplicação matricial utilizando o operador %*%
-  return(produto) ## Retorna o resultado da multiplicação
-}
-```
-
-<br>
-
-##### **Funções da Distribuição Geométrica**
-
-```{r funcoes3, echo = T, include = T, warning = F}
-## Função 7: Calcula a probabilidade de X = k para uma distribuição geométrica
-fdp.geometrica <- function(k, p) {
-  if (k < 1) { ## Verifica se k é menor que 1 (valores inválidos para a distribuição geométrica)
-    stop("k deve ser um número inteiro maior ou igual a 1.") ## Retorna um erro se k for inválido
-  }
-  fdp <- (1 - p)^(k - 1) * p ## Fórmula da probabilidade da distribuição geométrica
-  return(fdp) ## Retorna a probabilidade calculada
-}
-
-## Função 8: Calcula a função de distribuição acumulada (CDF) para X <= k
-fda.geometrica <- function(k, p) {
-  if (k < 1) { ## Verifica se k é menor que 1 (valores inválidos para a CDF da distribuição geométrica)
-    stop("k deve ser um número inteiro maior ou igual a 1.") ## Retorna um erro se k for inválido
-  }
-  fda <- 1 - (1 - p)^k ## Fórmula da CDF da distribuição geométrica
-  return(fda) ## Retorna o valor da CDF
-}
-
-## Função 9: Gera n valores aleatórios seguindo a distribuição geométrica
-gerador.geometrica <- function(n, p) {
-  if (n <= 0) { ## Verifica se n é menor ou igual a zero
-    stop("n deve ser maior que zero.") ## Retorna um erro se n for inválido
-  }
-  valores <- numeric(n) ## Cria um vetor vazio para armazenar os valores gerados
-  for (i in 1:n) { ## Inicia um loop para gerar n valores
-    u <- runif(1) ## Gera um número aleatório uniforme entre 0 e 1
-    valores[i] <- ceiling(log(1 - u) / log(1 - p)) ## Aplica a fórmula inversa da CDF para gerar o valor geométrico
-  }
-  return(valores) ## Retorna os valores gerados
-}
-
-## Função 10: Calcula a média teórica da distribuição geométrica
-media.geometrica <- function(p) {
-  media <- 1 / p ## Fórmula para a média teórica da distribuição geométrica
-  return(media) ## Retorna a média calculada
-}
-
-## Função 11: Calcula a variância teórica da distribuição geométrica
-variancia.geometrica <- function(p) {
-  variancia <- (1 - p) / (p^2) ## Fórmula para a variância teórica da distribuição geométrica
-  return(variancia) ## Retorna a variância calculada
-}
-```
-
-<br>
-
-##### **Funções do Modelo Probabilístico**
-
-```{r funcoes4, echo = T, include = T, warning = F}
-## Função 12: Calcula p_(AS) - Probabilidade de Não Ajustar o processo Sob Controle
-calcular.p.AS <- function(p1, alfa, beta) {
-  ## p1: probabilidade de conformidade do item sob controle (p_(+))
-  ## alfa: probabilidade de classificar item conforme como não conforme
-  ## beta: probabilidade de classificar item não conforme como conforme
-
-  termo.1 <- (1 - p1) * beta ## Probabilidade de itens não conformes classificados como conformes
-  termo.2 <- p1 * (1 - alfa) ## Probabilidade de itens conformes classificados como conformes
-  p.AS <- termo.1 + termo.2 ## Soma os termos para calcular p_(AS)
-  return(p.AS) ## Retorna p_(AS)
-}
-
-## Função 13: Calcula p_(AF) - Probabilidade de Não Ajustar o processo Fora de Controle
-calcular.p.AF <- function(p2, alfa, beta) {
-  ## p2: probabilidade de conformidade do item fora de controle (p_(-))
-  ## alfa: probabilidade de classificar item conforme como não conforme
-  ## beta: probabilidade de classificar item não conforme como conforme
-
-  termo.1 <- (1 - p2) * beta ## Probabilidade de itens não conformes classificados como conformes
-  termo.2 <- p2 * (1 - alfa) ## Probabilidade de itens conformes classificados como conformes
-  p.AF <- termo.1 + termo.2 ## Soma os termos para calcular p_(AF)
-  return(p.AF) ## Retorna p_(AF)
-}
-```
-
-<br>
-
-##### **Funções da Cadeia de Markov**
-
-```{r funcoes5, echo = T, include = T, warning = F}
-## Função 14: Calcula a probabilidade do processo continuar "Sob Controle" por L ciclos, dado que começa "Sob Controle"
-calc.prob.sob.controle.L <- function(pi, L) {
-  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
-  ## L: número de ciclos correntes
-
-  prob.sob.controle.L <- (1 - pi)^L ## Calcula a probabilidade de o processo continuar "Sob Controle" por L ciclos
-  return(prob.sob.controle.L) ## Retorna a probabilidade calculada
-}
-
-## Função 15: Calcula a probabilidade do processo continuar "Sob Controle" por m ciclos, dado que começa "Sob Controle"
-calc.prob.sob.controle.m <- function(pi, m) {
-  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
-  ## m: número de ciclos correntes
-
-  prob.sob.controle.m <- (1 - pi)^m ## Calcula a probabilidade de o processo continuar "Sob Controle" por m ciclos
-  return(prob.sob.controle.m) ## Retorna a probabilidade calculada
-}
-
-## Função 16: Calcula a probabilidade de o processo passar para "Fora de Controle" após L ciclos, dado que começa "Sob Controle"
-calc.prob.fora.controle.L <- function(pi, L) {
-  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
-  ## L: número de ciclos correntes
-
-  prob.fora.controle.L <- 1 - (1 - pi)^L ## Calcula a probabilidade de o processo passar para "Fora de Controle" após L ciclos
-  return(prob.fora.controle.L) ## Retorna a probabilidade calculada
-}
-
-## Função 17: Calcula a probabilidade de o processo passar para "Fora de Controle" após m ciclos, dado que começa "Sob Controle"
-calc.prob.fora.controle.m <- function(pi, m) {
-  ## pi: probabilidade de transição de "Fora de Controle" para "Sob Controle"
-  ## m: número de ciclos correntes
-
-  prob.fora.controle.m <- 1 - (1 - pi)^m ## Calcula a probabilidade de o processo passar para "Fora de Controle" após m ciclos
-  return(prob.fora.controle.m) ## Retorna a probabilidade calculada
-}
-
-calc.matriz.prob.markov <- function(p.AS, p.AF, p.AS.L, p.AF.L, p.AS.m, p.AF.m) {
-  
-  ## Probabilidades de transição para os diferentes estados:
-  P.00.00 <- (1 - p.AS) * p.AS.L
-  P.00.01 <- p.AS * p.AS.L
-  P.00.10 <- (1 - p.AF) * p.AF.L
-  P.00.11 <- p.AF * p.AF.L
-  P.00.20 <- 0
-  P.00.21 <- 0
-
-  P.01.00 <- (1 - p.AS) * p.AS.m
-  P.01.01 <- p.AS * p.AS.m
-  P.01.10 <- (1 - p.AF) * p.AF.m
-  P.01.11 <- p.AF * p.AF.m
-  P.01.20 <- 0
-  P.01.21 <- 0
-
-  P.10.00 <- 0
-  P.10.01 <- 0
-  P.10.10 <- 0
-  P.10.11 <- 0
-  P.10.20 <- 1 - p.AF
-  P.10.21 <- p.AF
-
-  P.11.00 <- 0
-  P.11.01 <- 0
-  P.11.10 <- 0
-  P.11.11 <- 0
-  P.11.20 <- 1 - p.AF
-  P.11.21 <- p.AF
-
-  P.20.00 <- (1 - p.AS) * p.AS.L
-  P.20.01 <- p.AS * p.AS.L
-  P.20.10 <- (1 - p.AF) * p.AF.L
-  P.20.11 <- p.AF * p.AF.L
-  P.20.20 <- 0
-  P.20.21 <- 0
-
-  P.21.00 <- (1 - p.AS) * p.AS.L
-  P.21.01 <- p.AS * p.AS.L
-  P.21.10 <- (1 - p.AF) * p.AF.L
-  P.21.11 <- p.AF * p.AF.L
-  P.21.20 <- 0
-  P.21.21 <- 0
-
-  ## Matriz de transição com as probabilidades:
-  matriz <- matrix(c(
-    P.00.00, P.00.01, P.00.10, P.00.11, P.00.20, P.00.21,
-    P.01.00, P.01.01, P.01.10, P.01.11, P.01.20, P.01.21,
-    P.10.00, P.10.01, P.10.10, P.10.11, P.10.20, P.10.21,
-    P.11.00, P.11.01, P.11.10, P.11.11, P.11.20, P.11.21,
-    P.20.00, P.20.01, P.20.10, P.20.11, P.20.20, P.20.21,
-    P.21.00, P.21.01, P.21.10, P.21.11, P.21.20, P.21.21), nrow = 6, byrow = TRUE)
-
-  ## Nomes das linhas e colunas:
-  rownames(matriz) <- c("(0,0)", "(0,1)", "(1,0)", "(1,1)", "(2,0)", "(2,1)")
-  colnames(matriz) <- c("(0,0)", "(0,1)", "(1,0)", "(1,1)", "(2,0)", "(2,1)")
-
-  return(matriz)
-}
-```
-
-<br>
-
-##### **Funções da Distribuição Estacionária**
-
-```{r funcoes6, echo = T, include = T, warning = F}
-calcular_pi <- function(P) {
-  n <- nrow(P)  ## Número de estados
-  I <- diag(n) ## Cria a matriz Identidade.
-  
-  P_minus_I <- P - I ## Substrae a matriz identidade de P
-  
-  # Adicionar a restrição de normalização (soma das probabilidades deve ser 1)
-  # Para isso, adicionamos uma linha de 1's e uma coluna de 1's no sistema
-  P_augmented <- rbind(P_minus_I, rep(1, n))
-  
-  # Agora, adicionamos a restrição de normalização, que é uma linha de 1's
-  P_augmented <- cbind(P_augmented, c(rep(0, n - 1), 1))
-  
-  # Vetor de constantes (todas as constantes são 0, exceto a última que é 1)
-  b <- c(rep(0, n), 1)
-  
-  # Resolver o sistema linear (P_augmented) %*% pi = b
-  pi <- solve(P_augmented, b)
-  
-  return(pi)
-}
-
-calcular_p_L <- function(P, pi) {
-  n <- nrow(P)
-  p_L <- matrix(0, nrow = n, ncol = 1)
-  
-  for (i in 1:n) {
-    if (i <= 3) {
-      soma_pi <- sum(pi[1:3])
-      p_L[i] <- sum(P[i, 1:3] * pi[1:3]) / pi[i]
-    } else {
-      p_L[i] <- 0
-    }
-  }
-  
-  return(p_L)
-}
-```
-
-<br>
-
-##### **Custos dos Estados**
+##### **Funções dos Custos dos Estados**
 
 ```{r funcoes7, echo = T, include = T, warning = F}
-calcular.custos <- function(p_mais, p_menos, alfa, beta, c_inspecao, c_ajuste, 
-                             c_desc_c, c_desc_nc, c_nc, p_AS, p_AF, p_L, pi, L, m) {
-
+calcular.custos <- function(p_mais, p_menos, alfa, beta, 
+                             c_inspecao, c_ajuste, c_desc_c, 
+                             c_desc_nc, c_nc, p_AS, p_AF, p_L, 
+                             pi, L, m) {
+  
   # Função auxiliar para calcular q.m(t) ou q.L(t)
-  calcular.q <- function(t, pi, comprimento) {
+  calcular_q <- function(t, pi, comprimento) {
     numerador <- (1 - pi)^(t - 1) * pi
     denominador <- 1 - (1 - pi)^comprimento
     return(numerador / denominador)
   }
   
-  # Cálculo para o estado (0,0)
-  xi_00 <- c_nc * ((p_AF[1] * (m - 1) * (1 - p_mais)) + (p_L[1] * (L - 1) * (1 - p_mais)))
-  theta_00 <- (c_desc_c * (p_mais * alfa) / (1 - p_AS)) + 
-              (c_desc_nc * ((1 - p_mais) * (1 - beta)) / (1 - p_AS))
-  phi_00 <- c_inspecao + xi_00 + theta_00 + c_ajuste
+  # Função para evitar divisões por zero
+  evitar_zero <- function(x) {
+    if (abs(x) < 1e-10) return(1e-10)
+    return(x)
+  }
   
-  # Cálculo para o estado (0,1)
-  xi_01 <- c_nc * ((p_AF[2] * (m - 1) * (1 - p_mais)) + (p_L[2] * (L - 1) * (1 - p_mais)))
-  theta_01 <- (c_desc_c * (p_mais * (1 - alfa)) / p_AS) + 
-              (c_desc_nc * ((1 - p_mais) * (1 - beta)) / p_AS)
-  phi_01 <- c_inspecao + xi_01 + theta_01
+  # Função para calcular xi e phi de maneira robusta
+  calcular_xi_theta_phi <- function(state, p_mais, p_menos, alfa, beta, 
+                                    c_inspecao, c_ajuste, c_desc_c, 
+                                    c_desc_nc, c_nc, p_AS, p_AF, p_L, 
+                                    pi, L, m) {
+    # Verifica cada estado e calcula os custos de xi, theta e phi
+    if (state == "(0,0)") {
+      p_m_00 <- p_L[1]
+      p_L_00 <- p_L[1]
+      xi_00 <- c_nc * (p_m_00 * (m - 1) * (1 - p_mais) + p_L_00 * (L - 1) * (1 - p_mais))
+      theta_00 <- c_desc_c * (p_mais * alfa) / evitar_zero(p_AS) + 
+                  c_desc_nc * ((1 - p_mais) * (1 - beta)) / evitar_zero(p_AS)
+      phi_00 <- c_inspecao + xi_00 + theta_00
+      
+      # Exibir resultados para (0,0)
+      print(paste("Estado (0,0):"))
+      print(paste("  xi(0,0):", xi_00))
+      print(paste("  theta(0,0):", theta_00))
+      print(paste("  phi(0,0):", phi_00))
+      
+      return(list(xi = xi_00, theta = theta_00, phi = phi_00))
+    }
+    
+    if (state == "(0,1)") {
+      p_m_01 <- p_L[2]
+      p_L_01 <- p_L[2]
+      
+      xi_01 <- c_nc * (p_m_01 * (m - 1) * (1 - p_mais) + p_L_01 * (L - 1) * (1 - p_mais))
+      theta_01 <- c_desc_c * (p_mais * (1 - alfa)) / evitar_zero(p_AS) + 
+                  c_desc_nc * ((1 - p_mais) * (1 - beta)) / evitar_zero(p_AS)
+      phi_01 <- c_inspecao + xi_01 + theta_01
+      
+      # Exibir resultados para (0,1)
+      print(paste("Estado (0,1):"))
+      print(paste("  xi(0,1):", xi_01))
+      print(paste("  theta(0,1):", theta_01))
+      print(paste("  phi(0,1):", phi_01))
+      
+      return(list(xi = xi_01, theta = theta_01, phi = phi_01))
+    }
+    
+    if (state == "(1,0)") {
+      p_m_10 <- p_L[1]
+      p_L_10 <- p_L[1]
+      
+      xi_10 <- c_nc * (p_m_10 * (m - 1) * (1 - p_mais) + p_L_10 * (L - 1) * (1 - p_mais))
+      
+      soma_q_m <- 0
+      for (t in 1:m) {
+        soma_q_m <- soma_q_m + calcular_q(t, pi, m) * ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos))
+      }
+      
+      soma_q_L <- 0
+      for (t in 1:L) {
+        soma_q_L <- soma_q_L + calcular_q(t, pi, L) * ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))
+      }
+      
+      xi_10 <- xi_10 * (soma_q_m + soma_q_L)
+      
+      theta_10 <- c_desc_c * (p_menos * (1 - alfa)) / evitar_zero(p_AF) + 
+                  c_desc_nc * ((1 - p_menos) * (1 - beta)) / evitar_zero(p_AF)
+      phi_10 <- c_inspecao + xi_10 + theta_10
+      
+      # Exibir resultados para (1,0)
+      print(paste("Estado (1,0):"))
+      print(paste("  xi(1,0):", xi_10))
+      print(paste("  theta(1,0):", theta_10))
+      print(paste("  phi(1,0):", phi_10))
+      
+      return(list(xi = xi_10, theta = theta_10, phi = phi_10))
+    }
+    
+    if (state == "(1,1)") {
+      p_m_11 <- p_L[1]
+      p_L_11 <- p_L[1]
+      
+      xi_11 <- c_nc * (p_m_11 * (m - 1) * (1 - p_mais) + p_L_11 * (L - 1) * (1 - p_mais))
+      
+      soma_q_m <- 0
+      for (t in 1:m) {
+        soma_q_m <- soma_q_m + calcular_q(t, pi, m) * ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos))
+      }
+      
+      soma_q_L <- 0
+      for (t in 1:L) {
+        soma_q_L <- soma_q_L + calcular_q(t, pi, L) * ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))
+      }
+      
+      xi_11 <- xi_11 * (soma_q_m + soma_q_L)
+      
+      theta_11 <- c_desc_c * (p_menos * (1 - alfa)) / evitar_zero(p_AF) + 
+                  c_desc_nc * ((1 - p_menos) * (1 - beta)) / evitar_zero(p_AF)
+      phi_11 <- c_inspecao + xi_11 + theta_11
+      
+      # Exibir resultados para (1,1)
+      print(paste("Estado (1,1):"))
+      print(paste("  xi(1,1):", xi_11))
+      print(paste("  theta(1,1):", theta_11))
+      print(paste("  phi(1,1):", phi_11))
+      
+      return(list(xi = xi_11, theta = theta_11, phi = phi_11))
+    }
+    
+    if (state == "(2,0)") {
+      xi_20 <- c_nc * (1 - p_menos) * (m - 1)
+      theta_20 <- c_desc_c * (p_menos * alfa) / evitar_zero(p_AF) + 
+                  c_desc_nc * ((1 - p_menos) * (1 - beta)) / evitar_zero(p_AF)
+      phi_20 <- c_inspecao + xi_20 + theta_20
+      
+      # Exibir resultados para (2,0)
+      print(paste("Estado (2,0):"))
+      print(paste("  xi(2,0):", xi_20))
+      print(paste("  theta(2,0):", theta_20))
+      print(paste("  phi(2,0):", phi_20))
+      
+      return(list(xi = xi_20, theta = theta_20, phi = phi_20))
+    }
+    
+    if (state == "(2,1)") {
+      xi_21 <- c_nc * (1 - p_menos) * (m - 1)
+      theta_21 <- c_desc_c * (p_menos * (1 - alfa)) / evitar_zero(p_AF) + 
+                  c_desc_nc * ((1 - p_menos) * beta) / evitar_zero(p_AF)
+      phi_21 <- c_inspecao + xi_21 + theta_21
+      
+      # Exibir resultados para (2,1)
+      print(paste("Estado (2,1):"))
+      print(paste("  xi(2,1):", xi_21))
+      print(paste("  theta(2,1):", theta_21))
+      print(paste("  phi(2,1):", phi_21))
+      
+      return(list(xi = xi_21, theta = theta_21, phi = phi_21))
+    }
+  }
   
-  # Cálculo para o estado (1,0)
-  xi_10 <- c_nc * (
-    p_AF[3] * sum(sapply(1:m, function(t) calcular.q(t, pi, m) * 
-                             ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos)))) +
-    p_L[3] * sum(sapply(1:L, function(t) calcular.q(t, pi, L) * 
-                             ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))))
-  )
-  theta_10 <- (c_desc_c * (p_menos * alfa) / (1 - p_AF)) + 
-              (c_desc_nc * ((1 - p_menos) * (1 - beta)) / (1 - p_AF))
-  phi_10 <- c_inspecao + xi_10 + theta_10 + c_ajuste
+  # Chamando a função para todos os estados possíveis e retornando os resultados
+  estados <- c("(0,0)", "(0,1)", "(1,0)", "(1,1)", "(2,0)", "(2,1)")
+  resultados <- lapply(estados, calcular_xi_theta_phi, 
+                       p_mais = p_mais, p_menos = p_menos, alfa = alfa, beta = beta, 
+                       c_inspecao = c_inspecao, c_ajuste = c_ajuste, c_desc_c = c_desc_c, 
+                       c_desc_nc = c_desc_nc, c_nc = c_nc, p_AS = p_AS, p_AF = p_AF, 
+                       p_L = p_L, pi = pi, L = L, m = m)
   
-  # Cálculo para o estado (1,1)
-  xi_11 <- c_nc * (
-    p_AF[4] * sum(sapply(1:m, function(t) calcular.q(t, pi, m) * 
-                             ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos)))) +
-    p_L[4] * sum(sapply(1:L, function(t) calcular.q(t, pi, L) * 
-                             ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))))
-  )
-  theta_11 <- (c_desc_c * (p_menos * (1 - alfa)) / p_AF) + 
-              (c_desc_nc * ((1 - p_menos) * beta) / p_AF)
-  phi_11 <- c_inspecao + xi_11 + theta_11
-  
-  # Cálculo para o estado (2,0)
-  xi_20 <- c_nc * (1 - p_menos) * (m - 1)
-  theta_20 <- (c_desc_c * (p_menos * alfa) / (1 - p_AF)) + 
-              (c_desc_nc * ((1 - p_menos) * (1 - beta)) / (1 - p_AF))
-  phi_20 <- c_inspecao + xi_20 + theta_20 + c_ajuste
-  
-  # Cálculo para o estado (2,1)
-  xi_21 <- c_nc * (1 - p_menos) * (m - 1)
-  theta_21 <- (c_desc_c * (p_menos * (1 - alfa)) / p_AF) + 
-              (c_desc_nc * ((1 - p_menos) * beta) / p_AF)
-  phi_21 <- c_inspecao + xi_21 + theta_21
-  
-  # Retorna os custos de todos os estados
-  return(list(
-    phi_00 = phi_00, phi_01 = phi_01,
-    phi_10 = phi_10, phi_11 = phi_11,
-    phi_20 = phi_20, phi_21 = phi_21
-  ))
+  return(resultados)
 }
+
+
+
 ```
+
+<br>
+
 
 <br>
 
@@ -1306,13 +1405,13 @@ cat("P.AS.L:", val.p.AS.L, "\n",
     "P.AF.m:", val.p.AF.m, "\n")
 
 matriz.P <- calc.matriz.prob.markov(val.p.AS, val.p.AF, val.p.AS.L, val.p.AF.L, val.p.AS.m, val.p.AF.m)
+PI <- calcular.distribuicao.estacionaria(matriz.P)
+p.L <- calcular.pL(matriz.P, PI)
+
+cat("Matriz de Transição (P):\n")
 matriz.P
-
-PI <- calcular_pi(matriz.P)
-p.L <- calcular_p_L(matriz.P, PI)
-
-PI
-p.L
+cat("\nDistribuição Estacionária:\n", PI)
+cat("\nProbabilidades de Transição:\n", p.L)
 
 # Chamada da função com os parâmetros fornecidos
 resultados <- calcular.custos(
@@ -1322,9 +1421,6 @@ resultados <- calcular.custos(
   c_nc = c.nc, p_AS = val.p.AS, p_AF = val.p.AF, p_L = p.L,
   pi = pe, L = L.teste, m = m.teste
 )
-
-# Exibindo os resultados
-print(resultados)
 ```
 
 <br>
