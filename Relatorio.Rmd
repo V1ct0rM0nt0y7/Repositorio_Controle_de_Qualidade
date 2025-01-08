@@ -26,6 +26,8 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```{r libraries, echo = T, include = T, message = F, warning = F}
 # Bibliotecas:
+library(DEoptim)
+library(microbenchmark)
 
 # Paletas de Cores Utilizadas:
   cores <- c(
@@ -683,11 +685,80 @@ p_{L}(2,1)
 0
 $$
 
-##### **Funções da Distribuição Estacionária**
+##### **Função da Distribuição Estacionária (Método LU)**
 
 ```{r funcoes5, echo = T, include = T, warning = F}
-## Função 15: Calcula a distribuição estacionária para uma cadeia de Markov
-calcular.distribuicao.estacionaria <- function(P) {
+## Função 12: Calcula a distribuição estacionária para uma cadeia de Markov pelo método da decomposição LU
+calcular.distribuicao.estacionaria.LU <- function(P) {
+  ## Verificar se a matriz é quadrada
+  if (!is.matrix(P) || nrow(P) != ncol(P)) {
+    stop("A matriz de transição deve ser quadrada.")
+  }
+  
+  n <- nrow(P)
+  
+  ## Modificar a matriz de transição para criar o sistema linear A * pi = 0
+  A <- t(P) - diag(n)
+  A[n, ] <- rep(1, n)  ## Adicionar restrição de soma das probabilidades
+  
+  b <- rep(0, n)
+  b[n] <- 1
+  
+  ## Função para decomposição LU
+  decomposicao_LU <- function(A) {
+    n <- nrow(A)
+    L <- diag(1, n)
+    U <- matrix(0, n, n)
+    
+    for (i in 1:n) {
+      for (j in i:n) {
+        U[i, j] <- A[i, j] - sum(L[i, 1:(i-1)] * U[1:(i-1), j])
+      }
+      for (j in (i+1):n) {
+        if (j <= n) {  ## Verificar limites de índices
+          L[j, i] <- (A[j, i] - sum(L[j, 1:(i-1)] * U[1:(i-1), i])) / U[i, i]
+        }
+      }
+    }
+    list(L = L, U = U)
+  }
+  
+  ## Função para resolver sistema linear L * y = b e U * x = y
+  resolver_LU <- function(L, U, b) {
+    n <- length(b)
+    
+    ## Resolver L * y = b (substituição progressiva)
+    y <- numeric(n)
+    for (i in 1:n) {
+      y[i] <- (b[i] - sum(L[i, 1:(i-1)] * y[1:(i-1)]))
+    }
+    
+    ## Resolver U * x = y (substituição retroativa)
+    x <- numeric(n)
+    for (i in n:1) {
+      if (i < n) {
+        x[i] <- (y[i] - sum(U[i, (i+1):n] * x[(i+1):n])) / U[i, i]
+      } else {
+        x[i] <- y[i] / U[i, i]
+      }
+    }
+    
+    x
+  }
+  
+  LU <- decomposicao_LU(A) ## Decomposição LU da matriz A
+  pi <- resolver_LU(LU$L, LU$U, b) ## Resolver o sistema linear A * pi = b usando a decomposição LU
+  pi <- pi / sum(pi) ## Normalizar pi para garantir que a soma seja 1
+  
+  return(pi)
+}
+```
+
+##### **Função da Distribuição Estacionária (Método QR)**
+
+```{r funcoes6, echo = T, include = T, warning = F}
+## Função 13: Calcula a distribuição estacionária para uma cadeia de Markov pelo método da decomposição QR
+calcular.distribuicao.estacionaria.QR <- function(P) {
   
   ## P: Matriz de transição de probabilidade (matriz quadrada de dimensões n x n)
   
@@ -697,38 +768,42 @@ calcular.distribuicao.estacionaria <- function(P) {
   
   n <- nrow(P) ## Número de estados
   
-  # Configurando o sistema linear (P' - I)π = 0 com a restrição de normalização π1 + π2 + ... + πn = 1
+  ## Configurando o sistema linear (P' - I)π = 0 com a restrição de normalização π1 + π2 + ... + πn = 1
   A <- t(P) - diag(1, n) ## Transposta de P subtraída pela identidade
   A <- rbind(A, rep(1, n)) ## Adiciona a equação de normalização
   b <- c(rep(0, n), 1) ## Vetor de constantes (0s e 1 para a normalização)
   
   pi <- qr.solve(A, b) ## Resolve o sistema utilizando decomposição QR
-  
   names(pi) <- paste0("pi.", 1:n) ## Nomeia os estados de forma similar à sua convenção
+  
   return(pi)
 }
+```
 
-## Função 16: Calcula a probabilidade de transição \( P_L(w,s) \) para cada estado (w,s)
+##### **Função para calcular $p_{L}$**
+
+```{r funcoes7, echo = T, include = T, warning = F}
+## Função 14: Calcula a probabilidade de transição P_L(w,s) para cada estado (w,s)
 calcular.pL <- function(P, pi) {
   
   ## P: Matriz de transição de probabilidade (matriz quadrada de dimensões n x n)
   ## pi: vetor contendo as probabilidades da distribuição estacionária (pi_1, pi_2, ..., pi_n)
   
-  n <- nrow(P)  # Número de estados na matriz P
-  pL <- rep(0, n)  # Inicializa o vetor de resultados com zeros
+  n <- nrow(P) ## Número de estados na matriz P
+  pL <- rep(0, n) ## Inicializa o vetor de resultados com zeros
   
-  # Soma dos valores de pi para os estados (0,0), (1,0), (2,0)
+  ## Soma dos valores de pi para os estados (0,0), (1,0), (2,0)
   soma_pi_0 <- pi[1] + pi[3] + pi[5]  # Soma das probabilidades dos estados (w,s)
   
-  # Calculando as probabilidades de transição p_L(w,s) para cada estado (w,s)
-  pL[1] <- (soma_pi_0 + P[1,1] + P[2,1] + P[3,1]) / (pi[1] * 100) # P_L(0,0)
-  pL[2] <- (soma_pi_0 + P[1,2] + P[2,2] + P[3,2]) / (pi[2] * 100) # P_L(0,1)
-  pL[3] <- (soma_pi_0 + P[1,3] + P[2,3] + P[3,3]) / (pi[3] * 100) # P_L(1,0)
-  pL[4] <- (soma_pi_0 + P[1,4] + P[2,4] + P[3,4]) / (pi[4] * 100) # P_L(1,1)
+  ## Calculando as probabilidades de transição p_L(w,s) para cada estado (w,s)
+  pL[1] <- (soma_pi_0 + P[1,1] + P[2,1] + P[3,1]) / (pi[1] * 100) ## P_L(0,0)
+  pL[2] <- (soma_pi_0 + P[1,2] + P[2,2] + P[3,2]) / (pi[2] * 100) ## P_L(0,1)
+  pL[3] <- (soma_pi_0 + P[1,3] + P[2,3] + P[3,3]) / (pi[3] * 100) ## P_L(1,0)
+  pL[4] <- (soma_pi_0 + P[1,4] + P[2,4] + P[3,4]) / (pi[4] * 100) ## P_L(1,1)
   
-  # Os estados 2,0 e 2,1 possuem probabilidade zero
-  pL[5] <- 0  # P_L(2,0)
-  pL[6] <- 0  # P_L(2,1)
+  ## Os estados 2,0 e 2,1 possuem probabilidade zero
+  pL[5] <- 0  ## P_L(2,0)
+  pL[6] <- 0  ## P_L(2,1)
   
   return(pL)
 }
@@ -1185,31 +1260,117 @@ $$
 
 ##### **Funções dos Custos dos Estados**
 
-```{r funcoes7, echo = T, include = T, warning = F}
+```{r funcoes9, echo = T, include = T, warning = F}
+## Função 15: com loops for para calcular os custos dos estados
 calcular.custos <- function(p_mais, p_menos, alfa, beta, 
+                                   c_inspecao, c_ajuste, c_desc_c, 
+                                   c_desc_nc, c_nc, p_AS, p_AF, p_L, 
+                                   pi, L, m) {
+  
+  ## Função auxiliar para calcular q.m(t) ou q.L(t)
+  calcular_q <- function(t, pi, comprimento) {
+    numerador <- (1 - pi)^(t - 1) * pi ## Calcula o numerador para q.m(t) ou q.L(t)
+    denominador <- 1 - (1 - pi)^comprimento ## Calcula o denominador para q.m(t) ou q.L(t)
+    return(numerador / denominador) ## Retorna o valor de q.m(t) ou q.L(t)
+  }
+  
+  ## Lista de estados possíveis
+  estados <- c("(0,0)", "(0,1)", "(1,0)", "(1,1)", "(2,0)", "(2,1)") ## Define os estados possíveis
+  
+  ## Inicializando lista para armazenar resultados
+  resultados <- list() ## Cria uma lista para armazenar os resultados dos cálculos
+  
+  ## Loop para calcular os custos de cada estado
+  for (state in estados) {
+    if (state == "(0,0)") { ## Caso o estado seja "(0,0)"
+      p_m_00 <- p_L[1] ## Atribui a probabilidade p_L[1] para p_m_00
+      p_L_00 <- p_L[1] ## Atribui a probabilidade p_L[1] para p_L_00
+      xi <- c_nc * (p_m_00 * (m - 1) * (1 - p_mais) + p_L_00 * (L - 1) * (1 - p_mais))
+      theta <- c_desc_c * (p_mais * alfa) / (ifelse(p_AS == 0, 1, p_AS)) + c_desc_nc * ((1 - p_mais) * (1 - beta)) / (ifelse(p_AS == 0, 1, p_AS))
+      phi <- c_inspecao + xi + theta
+      
+    } else if (state == "(0,1)") { ## Caso o estado seja "(0,1)"
+      p_m_01 <- p_L[2] ## Atribui a probabilidade p_L[2] para p_m_01
+      p_L_01 <- p_L[2] ## Atribui a probabilidade p_L[2] para p_L_01
+      xi <- c_nc * (p_m_01 * (m - 1) * (1 - p_mais) + p_L_01 * (L - 1) * (1 - p_mais))
+      theta <- c_desc_c * (p_mais * (1 - alfa)) / (ifelse(p_AS == 0, 1, p_AS)) + c_desc_nc * ((1 - p_mais) * (1 - beta)) / (ifelse(p_AS == 0, 1, p_AS))
+      phi <- c_inspecao + xi + theta 
+      
+    } else if (state == "(1,0)") { ## Caso o estado seja "(1,0)"
+      p_m_10 <- p_L[1] ## Atribui a probabilidade p_L[1] para p_m_10
+      p_L_10 <- p_L[1] ## Atribui a probabilidade p_L[1] para p_L_10
+      xi <- c_nc * (p_m_10 * (m - 1) * (1 - p_mais) + p_L_10 * (L - 1) * (1 - p_mais))
+      soma_q_m <- 0 ## Inicializa a soma de q_m
+      for (t in 1:m) { ## Loop para somar os valores de q.m(t) para o estado (1,0)
+        soma_q_m <- soma_q_m + calcular_q(t, pi, m) * ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos))
+      }
+      soma_q_L <- 0 ## Inicializa a soma de q_L
+      for (t in 1:L) { ## Loop para somar os valores de q.L(t) para o estado (1,0)
+        soma_q_L <- soma_q_L + calcular_q(t, pi, L) * ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))
+      }
+      xi <- xi * (soma_q_m + soma_q_L) ## Atualiza o valor de xi com a soma de q.m(t) e q.L(t)
+      theta <- c_desc_c * (p_menos * (1 - alfa)) / (ifelse(p_AF == 0, 1, p_AF)) + c_desc_nc * ((1 - p_menos) * (1 - beta)) / (ifelse(p_AF == 0, 1, p_AF))
+      phi <- c_inspecao + xi + theta ## Calcula o custo total (phi) para o estado (1,0)
+      
+    } else if (state == "(1,1)") { ## Caso o estado seja "(1,1)"
+      p_m_11 <- p_L[1] ## Atribui a probabilidade p_L[1] para p_m_11
+      p_L_11 <- p_L[1] ## Atribui a probabilidade p_L[1] para p_L_11
+      xi <- c_nc * (p_m_11 * (m - 1) * (1 - p_mais) + p_L_11 * (L - 1) * (1 - p_mais))
+      soma_q_m <- 0 ## Inicializa a soma de q_m
+      for (t in 1:m) { ## Loop para somar os valores de q.m(t) para o estado (1,1)
+        soma_q_m <- soma_q_m + calcular_q(t, pi, m) * ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos))
+      }
+      soma_q_L <- 0 ## Inicializa a soma de q_L
+      for (t in 1:L) { ## Loop para somar os valores de q.L(t) para o estado (1,1)
+        soma_q_L <- soma_q_L + calcular_q(t, pi, L) * ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))
+      }
+      xi <- xi * (soma_q_m + soma_q_L)
+      theta <- c_desc_c * (p_menos * (1 - alfa)) / (ifelse(p_AF == 0, 1, p_AF)) + c_desc_nc * ((1 - p_menos) * (1 - beta)) / (ifelse(p_AF == 0, 1, p_AF))
+      phi <- c_inspecao + xi + theta
+      
+    } else if (state == "(2,0)") { ## Caso o estado seja "(2,0)"
+      xi <- c_nc * (1 - p_menos) * (m - 1)
+      theta <- c_desc_c * (p_menos * alfa) / (ifelse(p_AF == 0, 1, p_AF)) + c_desc_nc * ((1 - p_menos) * (1 - beta)) / (ifelse(p_AF == 0, 1, p_AF))
+      phi <- c_inspecao + xi + theta
+      
+    } else if (state == "(2,1)") { ## Caso o estado seja "(2,1)"
+      xi <- c_nc * (1 - p_menos) * (m - 1)
+      theta <- c_desc_c * (p_menos * (1 - alfa)) / (ifelse(p_AF == 0, 1, p_AF)) + c_desc_nc * ((1 - p_menos) * beta) / (ifelse(p_AF == 0, 1, p_AF))
+      phi <- c_inspecao + xi + theta
+    }
+    
+    resultados[[state]] <- list(xi = xi, theta = theta, phi = phi) ## Adiciona os resultados do estado atual na lista 'resultados'
+  }
+  
+  return(resultados)
+}
+```
+
+```{r funcoes8, echo = F, include = F, warning = F}
+## Função 16: Calcula os custos de todos os estados
+calcular.custos.2 <- function(p_mais, p_menos, alfa, beta, 
                              c_inspecao, c_ajuste, c_desc_c, 
                              c_desc_nc, c_nc, p_AS, p_AF, p_L, 
                              pi, L, m) {
   
-  # Função auxiliar para calcular q.m(t) ou q.L(t)
+  ## Função auxiliar para calcular q.m(t) ou q.L(t)
   calcular_q <- function(t, pi, comprimento) {
     numerador <- (1 - pi)^(t - 1) * pi
     denominador <- 1 - (1 - pi)^comprimento
     return(numerador / denominador)
   }
   
-  # Função para evitar divisões por zero
+  ## Função para evitar divisões por zero
   evitar_zero <- function(x) {
     if (abs(x) < 1e-10) return(1e-10)
     return(x)
   }
   
-  # Função para calcular xi e phi de maneira robusta
+  ## Função para calcular xi, theta, phi
   calcular_xi_theta_phi <- function(state, p_mais, p_menos, alfa, beta, 
                                     c_inspecao, c_ajuste, c_desc_c, 
                                     c_desc_nc, c_nc, p_AS, p_AF, p_L, 
                                     pi, L, m) {
-    # Verifica cada estado e calcula os custos de xi, theta e phi
     if (state == "(0,0)") {
       p_m_00 <- p_L[1]
       p_L_00 <- p_L[1]
@@ -1217,93 +1378,42 @@ calcular.custos <- function(p_mais, p_menos, alfa, beta,
       theta_00 <- c_desc_c * (p_mais * alfa) / evitar_zero(p_AS) + 
                   c_desc_nc * ((1 - p_mais) * (1 - beta)) / evitar_zero(p_AS)
       phi_00 <- c_inspecao + xi_00 + theta_00
-      
-      # Exibir resultados para (0,0)
-      print(paste("Estado (0,0):"))
-      print(paste("  xi(0,0):", xi_00))
-      print(paste("  theta(0,0):", theta_00))
-      print(paste("  phi(0,0):", phi_00))
-      
       return(list(xi = xi_00, theta = theta_00, phi = phi_00))
     }
     
     if (state == "(0,1)") {
       p_m_01 <- p_L[2]
       p_L_01 <- p_L[2]
-      
       xi_01 <- c_nc * (p_m_01 * (m - 1) * (1 - p_mais) + p_L_01 * (L - 1) * (1 - p_mais))
       theta_01 <- c_desc_c * (p_mais * (1 - alfa)) / evitar_zero(p_AS) + 
                   c_desc_nc * ((1 - p_mais) * (1 - beta)) / evitar_zero(p_AS)
       phi_01 <- c_inspecao + xi_01 + theta_01
-      
-      # Exibir resultados para (0,1)
-      print(paste("Estado (0,1):"))
-      print(paste("  xi(0,1):", xi_01))
-      print(paste("  theta(0,1):", theta_01))
-      print(paste("  phi(0,1):", phi_01))
-      
       return(list(xi = xi_01, theta = theta_01, phi = phi_01))
     }
     
     if (state == "(1,0)") {
       p_m_10 <- p_L[1]
       p_L_10 <- p_L[1]
-      
       xi_10 <- c_nc * (p_m_10 * (m - 1) * (1 - p_mais) + p_L_10 * (L - 1) * (1 - p_mais))
-      
-      soma_q_m <- 0
-      for (t in 1:m) {
-        soma_q_m <- soma_q_m + calcular_q(t, pi, m) * ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos))
-      }
-      
-      soma_q_L <- 0
-      for (t in 1:L) {
-        soma_q_L <- soma_q_L + calcular_q(t, pi, L) * ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))
-      }
-      
+      soma_q_m <- sum(sapply(1:m, function(t) calcular_q(t, pi, m) * ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos))))
+      soma_q_L <- sum(sapply(1:L, function(t) calcular_q(t, pi, L) * ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))))
       xi_10 <- xi_10 * (soma_q_m + soma_q_L)
-      
       theta_10 <- c_desc_c * (p_menos * (1 - alfa)) / evitar_zero(p_AF) + 
                   c_desc_nc * ((1 - p_menos) * (1 - beta)) / evitar_zero(p_AF)
       phi_10 <- c_inspecao + xi_10 + theta_10
-      
-      # Exibir resultados para (1,0)
-      print(paste("Estado (1,0):"))
-      print(paste("  xi(1,0):", xi_10))
-      print(paste("  theta(1,0):", theta_10))
-      print(paste("  phi(1,0):", phi_10))
-      
       return(list(xi = xi_10, theta = theta_10, phi = phi_10))
     }
     
     if (state == "(1,1)") {
       p_m_11 <- p_L[1]
       p_L_11 <- p_L[1]
-      
       xi_11 <- c_nc * (p_m_11 * (m - 1) * (1 - p_mais) + p_L_11 * (L - 1) * (1 - p_mais))
-      
-      soma_q_m <- 0
-      for (t in 1:m) {
-        soma_q_m <- soma_q_m + calcular_q(t, pi, m) * ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos))
-      }
-      
-      soma_q_L <- 0
-      for (t in 1:L) {
-        soma_q_L <- soma_q_L + calcular_q(t, pi, L) * ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))
-      }
-      
+      soma_q_m <- sum(sapply(1:m, function(t) calcular_q(t, pi, m) * ((t - 1) * (1 - p_mais) + (m - t) * (1 - p_menos))))
+      soma_q_L <- sum(sapply(1:L, function(t) calcular_q(t, pi, L) * ((t - 1) * (1 - p_mais) + (L - t) * (1 - p_menos))))
       xi_11 <- xi_11 * (soma_q_m + soma_q_L)
-      
       theta_11 <- c_desc_c * (p_menos * (1 - alfa)) / evitar_zero(p_AF) + 
                   c_desc_nc * ((1 - p_menos) * (1 - beta)) / evitar_zero(p_AF)
       phi_11 <- c_inspecao + xi_11 + theta_11
-      
-      # Exibir resultados para (1,1)
-      print(paste("Estado (1,1):"))
-      print(paste("  xi(1,1):", xi_11))
-      print(paste("  theta(1,1):", theta_11))
-      print(paste("  phi(1,1):", phi_11))
-      
       return(list(xi = xi_11, theta = theta_11, phi = phi_11))
     }
     
@@ -1312,13 +1422,6 @@ calcular.custos <- function(p_mais, p_menos, alfa, beta,
       theta_20 <- c_desc_c * (p_menos * alfa) / evitar_zero(p_AF) + 
                   c_desc_nc * ((1 - p_menos) * (1 - beta)) / evitar_zero(p_AF)
       phi_20 <- c_inspecao + xi_20 + theta_20
-      
-      # Exibir resultados para (2,0)
-      print(paste("Estado (2,0):"))
-      print(paste("  xi(2,0):", xi_20))
-      print(paste("  theta(2,0):", theta_20))
-      print(paste("  phi(2,0):", phi_20))
-      
       return(list(xi = xi_20, theta = theta_20, phi = phi_20))
     }
     
@@ -1327,18 +1430,11 @@ calcular.custos <- function(p_mais, p_menos, alfa, beta,
       theta_21 <- c_desc_c * (p_menos * (1 - alfa)) / evitar_zero(p_AF) + 
                   c_desc_nc * ((1 - p_menos) * beta) / evitar_zero(p_AF)
       phi_21 <- c_inspecao + xi_21 + theta_21
-      
-      # Exibir resultados para (2,1)
-      print(paste("Estado (2,1):"))
-      print(paste("  xi(2,1):", xi_21))
-      print(paste("  theta(2,1):", theta_21))
-      print(paste("  phi(2,1):", phi_21))
-      
       return(list(xi = xi_21, theta = theta_21, phi = phi_21))
     }
   }
   
-  # Chamando a função para todos os estados possíveis e retornando os resultados
+  ## Chamando a função para todos os estados possíveis e retornando os resultados
   estados <- c("(0,0)", "(0,1)", "(1,0)", "(1,1)", "(2,0)", "(2,1)")
   resultados <- lapply(estados, calcular_xi_theta_phi, 
                        p_mais = p_mais, p_menos = p_menos, alfa = alfa, beta = beta, 
@@ -1348,13 +1444,7 @@ calcular.custos <- function(p_mais, p_menos, alfa, beta,
   
   return(resultados)
 }
-
-
-
 ```
-
-<br>
-
 
 <br>
 
@@ -1381,46 +1471,110 @@ c.nc <- 20 		      ## Custo de enviar items nao-conformes
 c.descarte.c <- 2 	## Custo de item conforme inspecionado/descartado
 c.descarte.nc <- 2 	## Custo de item nao-conforme inspecionado/descartado]
 
-L.teste <- 100
-m.teste <- 25
+L.teste <- 100 ## Valor de L para teste
+m.teste <- 25 ## Valor de m para teste
 ```
 
 O objetivo é encontrar os valores de m e L:
 
 ```{r aplicacao, echo = T, include = T, warning = F}
-val.p.AS <- calcular.p.AS(p1, alfa, beta)
-val.p.AF <- calcular.p.AF(p2, alfa, beta)
+val.p.AS <- calcular.p.AS(p1, alfa, beta) ## Calcula a probabilidade de estar sob controle (P.AS)
+val.p.AF <- calcular.p.AF(p2, alfa, beta) ## Calcula a probabilidade de estar fora de controle (P.AF)
 
-cat("P.AS:", val.p.AS, "\n",
-    "P.AF:", val.p.AF, "\n")
+cat("P.AS:", val.p.AS, "\n", ## Imprime a probabilidade P.AS
+    "P.AF:", val.p.AF, "\n") ## Imprime a probabilidade P.AF
 
-val.p.AS.L <- calc.prob.sob.controle.L(pe, L.teste)
-val.p.AF.L <- calc.prob.fora.controle.L(pe, L.teste)
-val.p.AS.m <- calc.prob.sob.controle.m(pe, m.teste)
-val.p.AF.m <- calc.prob.fora.controle.m(pe, m.teste)
+val.p.AS.L <- calc.prob.sob.controle.L(pe, L.teste) ## Calcula a probabilidade de estar sob controle para L
+val.p.AF.L <- calc.prob.fora.controle.L(pe, L.teste) ## Calcula a probabilidade de estar fora de controle para L
+val.p.AS.m <- calc.prob.sob.controle.m(pe, m.teste) ## Calcula a probabilidade de estar sob controle para m
+val.p.AF.m <- calc.prob.fora.controle.m(pe, m.teste) ## Calcula a probabilidade de estar fora de controle para m
 
-cat("P.AS.L:", val.p.AS.L, "\n",
-    "P.AF.L:", val.p.AF.L, "\n",
-    "P.AS.m:", val.p.AS.m, "\n",
-    "P.AF.m:", val.p.AF.m, "\n")
+cat("P.AS.L:", val.p.AS.L, "\n",  ## Imprime a probabilidade P.AS.L
+    "P.AF.L:", val.p.AF.L, "\n",  ## Imprime a probabilidade P.AF.L
+    "P.AS.m:", val.p.AS.m, "\n",  ## Imprime a probabilidade P.AS.m
+    "P.AF.m:", val.p.AF.m, "\n")  ## Imprime a probabilidade P.AF.m
 
-matriz.P <- calc.matriz.prob.markov(val.p.AS, val.p.AF, val.p.AS.L, val.p.AF.L, val.p.AS.m, val.p.AF.m)
-PI <- calcular.distribuicao.estacionaria(matriz.P)
-p.L <- calcular.pL(matriz.P, PI)
+matriz.P <- calc.matriz.prob.markov(val.p.AS, val.p.AF, val.p.AS.L, val.p.AF.L, val.p.AS.m, val.p.AF.m) ## Calcula a matriz de probabilidades de transição
 
-cat("Matriz de Transição (P):\n")
-matriz.P
-cat("\nDistribuição Estacionária:\n", PI)
-cat("\nProbabilidades de Transição:\n", p.L)
+PI.QR <- calcular.distribuicao.estacionaria.QR(matriz.P) ## Calcula a distribuição estacionária usando o método QR
+PI.LU <- calcular.distribuicao.estacionaria.LU(matriz.P) ## Calcula a distribuição estacionária usando o método LU
+summary(microbenchmark(LU = calcular.distribuicao.estacionaria.LU(matriz.P), QR = calcular.distribuicao.estacionaria.QR(matriz.P), times = 100)) ## Compara o tempo de execução entre LU e QR com microbenchmark
 
-# Chamada da função com os parâmetros fornecidos
-resultados <- calcular.custos(
+p.L.LU <- calcular.pL(matriz.P, PI.LU) ## Calcula a probabilidade de transição usando LU
+p.L.QR <- calcular.pL(matriz.P, PI.QR) ## Calcula a probabilidade de transição usando QR
+p.L.LU;p.L.QR ## Compara os valores
+
+cat("Matriz de Transição (P):\n"); matriz.P ## Imprime a matriz de transição P
+cat("\nDistribuição Estacionária:\n", PI.QR) ## Imprime a distribuição estacionária calculada por QR
+cat("\nProbabilidades de Transição:\n", p.L.QR) ## Imprime as probabilidades de transição
+
+custos <- calcular.custos( ## Usa a função para calcular os custos dos estados
   p_mais = p1, p_menos = p2, alfa = alfa, beta = beta,
   c_inspecao = c.inspecao, c_ajuste = c.ajuste, 
   c_desc_c = c.descarte.c, c_desc_nc = c.descarte.nc, 
-  c_nc = c.nc, p_AS = val.p.AS, p_AF = val.p.AF, p_L = p.L,
+  c_nc = c.nc, p_AS = val.p.AS, p_AF = val.p.AF, p_L = p.L.QR,
   pi = pe, L = L.teste, m = m.teste
 )
+
+resultados <- data.frame( ## Cria um data.frame para armazenar os resultados dos custos de cada estado
+  Estado = c("(0,0)", "(0,1)", "(1,0)", "(1,1)", "(2,0)", "(2,1)"),
+  xi = round(sapply(custos, function(x) x$xi), 5),
+  theta = round(sapply(custos, function(x) x$theta), 5),
+  phi = round(sapply(custos, function(x) x$phi), 5)
+)
+
+resultados ## Exibe o data.frame
 ```
 
 <br>
+
+#### **Otimização Discreta** {.tabset .tabset-pills}
+
+```{r otimizacao, echo = T, include = T, warning = F}
+# Definir os valores possíveis para L e m
+valores_L <- seq(100, 600, by = 2) # Ajuste os intervalos conforme necessário
+valores_m <- seq(5, 100, by = 2)
+
+# Criar um data.frame para armazenar os resultados
+resultados_gerais <- data.frame(L = integer(), m = integer(), custo_unitario = numeric())
+
+# Iterar sobre todas as combinações de L e m
+for (L_teste in valores_L) {
+  for (m_teste in valores_m) {
+    
+    # Calcular probabilidades
+    val.p.AS <- calcular.p.AS(p1, alfa, beta)
+    val.p.AF <- calcular.p.AF(p2, alfa, beta)
+    val.p.AS.L <- calc.prob.sob.controle.L(pe, L_teste)
+    val.p.AF.L <- calc.prob.fora.controle.L(pe, L_teste)
+    val.p.AS.m <- calc.prob.sob.controle.m(pe, m_teste)
+    val.p.AF.m <- calc.prob.fora.controle.m(pe, m_teste)
+    
+    matriz.P <- calc.matriz.prob.markov(val.p.AS, val.p.AF, val.p.AS.L, val.p.AF.L, val.p.AS.m, val.p.AF.m) ## Calcula a matriz de probabilidades de transição
+    PI.QR <- calcular.distribuicao.estacionaria.QR(matriz.P) ## Calcular distribuição estacionária (pelo método QR)
+    p.L.QR <- calcular.pL(matriz.P, PI.QR) ## Calcula probabilidades de transição
+    
+    custos <- calcular.custos( ## Calcular os custos de cada estado
+      p_mais = p1, p_menos = p2, alfa = alfa, beta = beta,
+      c_inspecao = c.inspecao, c_ajuste = c.ajuste, 
+      c_desc_c = c.descarte.c, c_desc_nc = c.descarte.nc, 
+      c_nc = c.nc, p_AS = val.p.AS, p_AF = val.p.AF, p_L = p.L.QR,
+      pi = pe, L = L_teste, m = m_teste
+    )
+    
+    ## Calcular custo unitário total (soma de phi dos estados)
+    custo_unitario <- sum(sapply(custos, function(x) x$phi))/sum(L_teste + m_teste)
+    
+    # Adicionar resultado ao data.frame
+    resultados_gerais <- rbind(resultados_gerais, data.frame(L = L_teste, m = m_teste, custo_unitario = custo_unitario))
+  }
+}
+
+# Identificar a combinação que minimiza o custo
+melhor_comb <- resultados_gerais[which.min(resultados_gerais$custo_unitario), ]
+cat("Melhor combinação encontrada:\n")
+print(melhor_comb)
+
+# Visualizar os resultados gerais (opcional)
+resultados_gerais
+```
